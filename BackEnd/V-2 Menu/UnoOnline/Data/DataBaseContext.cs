@@ -10,6 +10,7 @@ namespace UnoOnline.Data
         private const string DATABASE_PATH = "uno.db";
 
         public DbSet<User> Users { get; set; }
+        public DbSet<FriendRequest> FriendRequests { get; set; }
 
         //public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
 

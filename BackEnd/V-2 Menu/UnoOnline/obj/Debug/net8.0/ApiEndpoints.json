@@ -106,7 +106,7 @@
   {
     "ContainingType": "UnoOnline.Controllers.WebSocketController",
     "Method": "ConnectAsync",
-    "RelativePath": "socket/connect",
+    "RelativePath": "api/websocket/connect",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

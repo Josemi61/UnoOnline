@@ -1,4 +1,5 @@
 //using Examples.WebApi.Services;
+using Memory.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -11,7 +12,7 @@ using UnoOnline.DataMappers;
 using UnoOnline.Interfaces;
 using UnoOnline.Models;
 using UnoOnline.Repositories;
-using UnoOnline.WebSocketAdvanced;
+using UnoOnline.WebSockets;
 
 namespace UnoOnline
 {
@@ -37,8 +38,11 @@ namespace UnoOnline
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<UserMapper>();
+            builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            builder.Services.AddScoped<FriendshipRepository>();
+            builder.Services.AddScoped<FriendshipService>();
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
-            builder.Services.AddSingleton<WebSocketNetwork>();
+            builder.Services.AddSingleton<WebSocketHandler>();
             builder.Services.AddScoped<DataBaseContext>();
             
             // Swagger configuration
