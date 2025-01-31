@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Net.WebSockets;
 using System.Text;
 using UnoOnline.Models;
+using UnoOnline.Interfaces;
 
 namespace UnoOnline.WebSockets;
 
@@ -18,11 +19,19 @@ public class WebSocketHandler
 
     public async Task HandleWebSocketAsync(WebSocket webSocket, string userId)
     {
-        if (_connections.ContainsKey(userId))
+        if (_connections.TryGetValue(userId, out var existingSocket))
         {
-            Console.WriteLine($"🔄 Usuario {userId} ya está conectado.");
-            return;
+            if (existingSocket.State == WebSocketState.Open)
+            {
+                await existingSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Cerrando conexión duplicada", CancellationToken.None);
+            }
+            _connections.TryRemove(userId, out _);
         }
+        //if (_connections.ContainsKey(userId))
+        //{
+        //    Console.WriteLine($"🔄 Usuario {userId} ya está conectado.");
+        //    return;
+        //}
 
         _connections[userId] = webSocket;
 
@@ -58,6 +67,9 @@ public class WebSocketHandler
                     case "FriendRequestResponse":
                         await HandleFriendRequestResponse(requestData);
                         break;
+                    case "StatusUpdate":
+                        await HandleStatusUpdate(requestData);
+                        break;
                     default:
                         Console.WriteLine($"⚠️ Tipo de mensaje desconocido: {messageType}");
                         break;
@@ -77,6 +89,81 @@ public class WebSocketHandler
             }
         }
     }
+
+    private async Task HandleStatusUpdate(string request)
+    {
+        // Dividir los datos recibidos por la coma
+        var requestParts = request.Split(',');
+
+        // Verificar que el mensaje tiene exactamente dos partes (userId y status)
+        if (requestParts.Length != 2)
+        {
+            Console.WriteLine("⚠️ Formato inválido para StatusUpdate. Debe ser 'userId,newStatus'");
+            return;
+        }
+
+        // Convertir los valores a enteros (userId y status)
+        if (!int.TryParse(requestParts[0], out int userId) || !int.TryParse(requestParts[1], out int newStatus))
+        {
+            Console.WriteLine("⚠️ Error en la conversión de los datos. Asegúrese de que los valores sean enteros.");
+            return;
+        }
+
+        // Verificar que el estado es válido (0, 1, 2)
+        if (newStatus < 0 || newStatus > 2)
+        {
+            Console.WriteLine($"⚠️ Estado inválido recibido: {newStatus}. Debe ser 0 (Desconectado), 1 (Conectado) o 2 (Jugando).");
+            return;
+        }
+
+        // Procesar el cambio de estado del usuario
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
+
+            // Obtener el usuario por su Id
+            var user = await userRepository.GetUserByIdAsync(userId);
+            if (user == null)
+            {
+                Console.WriteLine($"⚠️ Usuario con ID {userId} no encontrado.");
+                return;
+            }
+
+            // Cambiar el estado del usuario
+            user.Status = (StatusUser)newStatus;
+
+            // Guardar los cambios en la base de datos
+            await userRepository.UpdateUserAsync(user);
+
+            Console.WriteLine($"✅ Estado del usuario {userId} actualizado a {newStatus}");
+
+            // Enviar el mensaje a los otros usuarios conectados (broadcast)
+            await BroadcastStatus(userId, newStatus);
+        }
+    }
+
+
+
+
+    private async Task BroadcastStatus(int userId, int newStatus)
+    {
+        var message = $"StatusUpdate|{userId},{newStatus}";
+        var bytes = Encoding.UTF8.GetBytes(message);
+
+        // Enviar el mensaje a todos los clientes conectados
+        foreach (var connection in _connections.Values)
+        {
+            if (connection.State == WebSocketState.Open)
+            {
+                await connection.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+        }
+
+        Console.WriteLine($"📤 Enviado mensaje de actualización de estado: {message}");
+    }
+
+
+
 
     // ✅ Procesar solicitudes de amistad
     private async Task HandleFriendRequest(string requestData)
