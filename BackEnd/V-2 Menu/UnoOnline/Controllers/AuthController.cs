@@ -45,7 +45,8 @@ namespace UnoOnline.Controllers
                         { "Id", user.Id },
                         { "Apodo", user.Apodo },
                         { "Email", user.Email },
-                        { "Avatar", user.Avatar }
+                        { "Avatar", user.Avatar },
+                        { "Estado", user.Status.ToString() }
                     },
                     Expires = DateTime.UtcNow.AddHours(2),
                     SigningCredentials = new SigningCredentials(

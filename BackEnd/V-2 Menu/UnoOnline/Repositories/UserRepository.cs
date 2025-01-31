@@ -41,6 +41,15 @@ namespace UnoOnline.Repositories
             return await _context.Users.OrderBy(u => u.Id).ToListAsync();
         }
 
+        public async Task<ICollection<User>> GetUsersExceptAsync(long userId)
+        {
+            return await _context.Users
+                .Where(u => u.Id != userId)
+                .OrderBy(u => u.Id)
+                .ToListAsync();
+        }
+
+
         public async Task<string> StoreImageAsync(IFormFile file, string apodo)
         {
             string fileExtension = Path.GetExtension(file.FileName);
@@ -57,5 +66,13 @@ namespace UnoOnline.Repositories
 
             return fileName;
         }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

@@ -15,6 +15,7 @@ namespace UnoOnline.Repositories
         Task<List<FriendRequest>> GetPendingRequests(int userId);
         Task<bool> RequestExists(int senderId, int receiverId);
         Task UpdateRequest(FriendRequest request);
+        Task<List<User>> GetFriends(int userId);
     }
 
     public class FriendshipRepository : IFriendshipRepository
@@ -28,7 +29,7 @@ namespace UnoOnline.Repositories
 
         public async Task AddRequest(FriendRequest request)
         {
-            if (await RequestExists(request.SenderId, request.ReceiverId))
+            if (await RequestExists((int)request.SenderId, (int)request.ReceiverId))
             {
                 Console.WriteLine($"⚠️ Friend Request already exists: Sender {request.SenderId}, Receiver {request.ReceiverId}");
                 return;
@@ -89,6 +90,14 @@ namespace UnoOnline.Repositories
             {
                 Console.WriteLine($"❌ Error updating Friend Request: {ex.Message}");
             }
+        }
+
+        public async Task<List<User>> GetFriends(int userId)
+        {
+            return await _context.FriendRequests
+                .Where(r => (r.SenderId == userId || r.ReceiverId == userId) && r.Status == RequestStatus.Accepted)
+                .Select(r => r.SenderId == userId ? r.Receiver : r.Sender) // Recuperar el objeto User
+                .ToListAsync();
         }
     }
 }

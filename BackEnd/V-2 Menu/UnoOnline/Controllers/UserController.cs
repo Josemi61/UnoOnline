@@ -148,5 +148,26 @@ namespace UnoOnline.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpPut("{id}/{status}")]
+        public async Task<IActionResult> ChangeStatus(long id, StatusUser status)
+        {
+            var user = await _userRepository.GetUserByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("Usuario no encontrado");
+            }
+
+            // Convertir el número en un valor del enum
+            if (!Enum.IsDefined(typeof(StatusUser), status))
+            {
+                return BadRequest("Estado no válido. Debe ser 0 (Desconectado), 1 (Conectado) o 2 (Jugando)");
+            }
+
+            user.Status = status;
+            await _userRepository.UpdateUserAsync(user);
+
+            return Ok("Estado actualizado correctamente");
+        }
     }
 }

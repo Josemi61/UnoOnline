@@ -3,6 +3,8 @@ using System.Globalization;
 using System.Text;
 using UnoOnline.DTO;
 using UnoOnline.Interfaces;
+using UnoOnline.Models;
+using UnoOnline.Repositories;
 
 namespace UnoOnline.Controllers
 {
@@ -11,25 +13,28 @@ namespace UnoOnline.Controllers
     public class SearchController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly FriendshipRepository _friendshipRepository;
 
-        public SearchController(IUserRepository userRepository)
+        public SearchController(IUserRepository userRepository, FriendshipRepository friendshipRepository)
         {
             _userRepository = userRepository;
+            _friendshipRepository = friendshipRepository;
         }
 
-        [HttpPost("Search")]
-        public async Task<IActionResult> SearchAsync([FromBody] Search request)
+        [HttpPost("Search/{id}")]
+        public async Task<IActionResult> SearchAsync([FromBody] Search request, int id)
         {
             if (string.IsNullOrWhiteSpace(request.Apodo))
             {
-                var todosUsers = await _userRepository.GetUsersAsync();
+                var todosUsers = await _userRepository.GetUsersExceptAsync(id);
                 var allUsersDTO = todosUsers
                 .Select(u => new UserDTO
                 {
                     Id = u.Id,
                     Apodo = u.Apodo,
                     Avatar = u.Avatar,
-                    Email = u.Email
+                    Email = u.Email,
+                    Status = u.Status.ToString()
                 })
                 .ToList();
 
@@ -39,7 +44,7 @@ namespace UnoOnline.Controllers
             try
             {
                 // Obtener todos los usuarios desde el repositorio
-                var users = await _userRepository.GetUsersAsync();
+                var users = await _userRepository.GetUsersExceptAsync(id);
 
                 // Verifica que hay usuarios en la base de datos
                 if (users == null || !users.Any())
@@ -59,7 +64,69 @@ namespace UnoOnline.Controllers
                         Id = u.Id,
                         Apodo = u.Apodo,
                         Avatar = u.Avatar,
-                        Email = u.Email
+                        Email = u.Email,
+                        Status = u.Status.ToString()
+                    })
+                    .ToList();
+
+                if (!matchingUsers.Any())
+                {
+                    return NotFound("No se encontraron amigos que coincidan con la búsqueda.");
+                }
+
+                return Ok(matchingUsers);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+        }
+
+        [HttpPost("SearchAmigos/{id}")]
+        public async Task<IActionResult> SearchAmigosAsync([FromBody] Search request, int id)
+        {
+            if (string.IsNullOrWhiteSpace(request.Apodo))
+            {
+                var todosUsers = await _friendshipRepository.GetFriends(id);
+                var allUsersDTO = todosUsers
+                .Select(u => new UserDTO
+                {
+                    Id = u.Id,
+                    Apodo = u.Apodo,
+                    Avatar = u.Avatar,
+                    Email = u.Email,
+                    Status = u.Status.ToString()
+                })
+                .ToList();
+
+                return Ok(allUsersDTO);
+            }
+
+            try
+            {
+                // Obtener todos los usuarios desde el repositorio
+                var users = await _friendshipRepository.GetFriends(id);
+
+                // Verifica que hay usuarios en la base de datos
+                if (users == null || !users.Any())
+                {
+                    return NotFound("No hay usuarios disponibles para buscar.");
+                }
+
+                // Normalizar la cadena de búsqueda para ignorar tildes y mayúsculas/minúsculas
+                string normalizedSearch = RemoveDiacritics(request.Apodo.ToLowerInvariant());
+
+                // Filtrar amigos cuyos apodos contengan la cadena normalizada
+                var matchingUsers = users
+                    .Where(u => !string.IsNullOrWhiteSpace(u.Apodo) && // Evitar errores si algún apodo es nulo
+                                RemoveDiacritics(u.Apodo.ToLowerInvariant()).Contains(normalizedSearch))
+                    .Select(u => new UserDTO
+                    {
+                        Id = u.Id,
+                        Apodo = u.Apodo,
+                        Avatar = u.Avatar,
+                        Email = u.Email,
+                        Status = u.Status.ToString()
                     })
                     .ToList();
 
