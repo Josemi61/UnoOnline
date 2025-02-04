@@ -23,10 +23,12 @@ public class WebSocketHandler
         {
             if (existingSocket.State == WebSocketState.Open)
             {
+                Console.WriteLine($"🔄 Usuario {userId} ya está conectado. Cerrando conexión duplicada.");
                 await existingSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Cerrando conexión duplicada", CancellationToken.None);
             }
             _connections.TryRemove(userId, out _);
         }
+
         //if (_connections.ContainsKey(userId))
         //{
         //    Console.WriteLine($"🔄 Usuario {userId} ya está conectado.");
@@ -34,6 +36,7 @@ public class WebSocketHandler
         //}
 
         _connections[userId] = webSocket;
+        Console.WriteLine($"🔄 Usuario {userId} ya está conectado.");
 
         var buffer = new byte[1024 * 4];
         try
