@@ -55,13 +55,13 @@ namespace UnoOnline.Repositories
             return await _context.GameRooms.FirstOrDefaultAsync(r => r.GuestId == null && r.IsActive);
         }
 
-        public async Task<bool> ConvertRoomToBotGameAsync(int hostId)
+        public async Task<bool> ConvertRoomToBotGameAsync(string roomId)
         {
-            var room = await _context.GameRooms.FirstOrDefaultAsync(r => r.HostId == hostId && r.IsActive);
+            var room = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId && r.IsActive);
 
             if (room == null)
             {
-                Console.WriteLine($"❌ No se encontró una sala activa para el host {hostId}.");
+                Console.WriteLine($"❌ No se encontró una sala activa con ID {roomId}.");
                 return false;
             }
 
@@ -76,11 +76,12 @@ namespace UnoOnline.Repositories
             await _context.SaveChangesAsync();
 
             // Confirmar que se guardó correctamente
-            var updatedRoom = await _context.GameRooms.FirstOrDefaultAsync(r => r.HostId == hostId);
+            var updatedRoom = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId);
             Console.WriteLine($"🔍 Verificación post-actualización: GuestId={updatedRoom?.GuestId}");
 
             return updatedRoom?.GuestId == -1;
         }
+
     }
 }
 

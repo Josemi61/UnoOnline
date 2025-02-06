@@ -174,9 +174,35 @@ public class WebSocketHandler
 
     private async Task HandlePlayAgainstBot(string requestData)
     {
-        if (!int.TryParse(requestData, out int playerId))
+        Console.WriteLine($"📩 Mensaje recibido: '{requestData}'");
+
+        // Verificamos que requestData contiene solo roomId
+        if (string.IsNullOrEmpty(requestData))
         {
-            Console.WriteLine("⚠️ Formato inválido para PlayAgainstBot. Debe ser 'PlayAgainstBot|playerId'");
+            Console.WriteLine("⚠️ El mensaje recibido está vacío.");
+            return;
+        }
+
+        // El mensaje recibido solo tiene roomId, así que lo tratamos como 'PlayAgainstBot|roomId'
+        string formattedMessage = $"PlayAgainstBot|{requestData}";
+        Console.WriteLine($"🔍 Formato correcto: '{formattedMessage}'");
+
+        // Ahora partimos el mensaje correctamente
+        var parts = formattedMessage.Split('|', StringSplitOptions.RemoveEmptyEntries);
+        Console.WriteLine($"🔍 Partes del mensaje después de split: {string.Join(", ", parts)}");
+
+        if (parts.Length != 2 || !parts[0].Equals("PlayAgainstBot", StringComparison.OrdinalIgnoreCase))
+        {
+            Console.WriteLine($"⚠️ Formato inválido para PlayAgainstBot. Recibido: '{formattedMessage}', esperado: 'PlayAgainstBot|roomId'");
+            return;
+        }
+
+        string roomId = parts[1].Trim(); // Asegúrate de eliminar los espacios en blanco
+        Console.WriteLine($"🔍 roomId extraído: '{roomId}'");
+
+        if (string.IsNullOrEmpty(roomId))
+        {
+            Console.WriteLine("⚠️ roomId no puede estar vacío.");
             return;
         }
 
@@ -185,23 +211,30 @@ public class WebSocketHandler
             var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
 
             // Crear una nueva sala con el bot (-1 como GuestId)
-            bool success = await gameRoomRepository.ConvertRoomToBotGameAsync(playerId);
+            bool success = await gameRoomRepository.ConvertRoomToBotGameAsync(roomId);
 
             if (success)
             {
-                Console.WriteLine($"🤖 Sala del host {playerId} convertida en partida contra el bot.");
+                Console.WriteLine($"🤖 Sala con ID {roomId} convertida en partida contra el bot.");
 
                 // Notificar al host
-                var message = $"GameUpdated|{playerId},BOT";
+                var message = $"GameUpdated|{roomId},BOT";
                 var bytes = Encoding.UTF8.GetBytes(message);
 
-                if (_connections.TryGetValue(playerId.ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
+                if (_connections.TryGetValue(roomId, out var webSocket) && webSocket.State == WebSocketState.Open)
                 {
                     await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
                 }
             }
+            else
+            {
+                Console.WriteLine($"❌ No se pudo convertir la sala con ID {roomId} en una partida contra el bot.");
+            }
         }
     }
+
+
+
 
 
 
