@@ -1,42 +1,65 @@
 import { useEffect, useState } from "react";
 
-const useWebSocket = (userId: string | null) => {
+const useWebSocket = () => {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-
+  
   useEffect(() => {
-    if (userId) {
-      const socketConnection = new WebSocket(`wss://localhost:7201/api/websocket/connect?userId=${userId}`);
+    const storedUser = localStorage.getItem("user");
 
-      socketConnection.onopen = () => {
-        setIsConnected(true);
-        console.log("🔗 WebSocket conectado");
-      };
-
-      socketConnection.onerror = (error) => {
-        console.error("❌ Error en WebSocket:", error);
-      };
-
-      socketConnection.onclose = () => {
-        setIsConnected(false);
-        console.log("🔗 WebSocket desconectado");
-      };
-
-      socketConnection.onmessage = (event) => {
-        console.log("📩 Mensaje recibido:", event.data);
-      };
-
-      setSocket(socketConnection);
-
-      return () => {
-        socketConnection.close();
-      };
+    if (!storedUser) {
+      console.warn("No hay usuario en localStorage, WebSocket no se iniciará.");
+      return;
     }
-  }, [userId]);
+
+    let user;
+    try {
+      user = JSON.parse(storedUser);
+    } catch (error) {
+      console.error("Error al parsear usuario de localStorage:", error);
+      return;
+    }
+
+    if (!user.id) {
+      console.warn("Usuario no válido en localStorage, WebSocket no se iniciará.");
+      return;
+    }
+
+    console.log(`🔗 Conectando WebSocket para userId: ${user.id}`);
+
+    const ws = new WebSocket(`wss://localhost:7201/api/websocket/connect?userId=${user.id}`);
+
+    ws.onopen = () => {
+      setIsConnected(true);
+      console.log("✅ WebSocket conectado");
+    };
+
+    ws.onerror = (error) => {
+      console.error("❌ Error en WebSocket:", error);
+    };
+
+    ws.onclose = () => {
+      setIsConnected(false);
+      console.warn("⚠️ WebSocket desconectado");
+    };
+
+    ws.onmessage = (event) => {
+      console.log("📩 Mensaje recibido:", event.data);
+    };
+
+    setSocket(ws);
+
+    return () => {
+      console.log("🔌 Cerrando WebSocket para userId:", user.id);
+      ws.close();
+    };
+  }, []);
 
   const sendMessage = (message: string) => {
     if (socket && isConnected) {
       socket.send(message);
+    } else {
+      console.warn("No se puede enviar el mensaje, WebSocket no está conectado.");
     }
   };
 

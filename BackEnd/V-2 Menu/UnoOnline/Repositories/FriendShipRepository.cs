@@ -96,7 +96,7 @@ namespace UnoOnline.Repositories
         {
             return await _context.FriendRequests
                 .Where(r => (r.SenderId == userId || r.ReceiverId == userId) && r.Status == RequestStatus.Pending)
-                .Select(r => r.SenderId == userId ? r.Receiver : r.Sender) // Recuperar el objeto User
+                .Select(r => r.SenderId == userId ? r.Receiver : r.Sender) 
                 .ToListAsync();
         }
     }

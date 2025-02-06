@@ -20,7 +20,7 @@ namespace UnoOnline.Controllers
             var friends = await _friendshipRepository.GetFriends(userId);
 
             if (friends == null || friends.Count == 0)
-                return NotFound(new { message = "No friends found for this user." });
+                return NotFound(new { message = "No friends request for this user." });
 
             var result = friends.Select(f => new
             {
