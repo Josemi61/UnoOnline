@@ -28,9 +28,9 @@ namespace UnoOnline
             {
                 options.AddPolicy("AllowAllOrigins", builder =>
                 {
-                    builder.AllowAnyOrigin()    // Permite cualquier origen (incluyendo todos los puertos de localhost)
-                           .AllowAnyHeader()    // Permite cualquier encabezado
-                           .AllowAnyMethod();   // Permite cualquier m�todo (GET, POST, etc.)
+                    builder.AllowAnyOrigin()    
+                           .AllowAnyHeader()    
+                           .AllowAnyMethod();   
                 });
             });
 

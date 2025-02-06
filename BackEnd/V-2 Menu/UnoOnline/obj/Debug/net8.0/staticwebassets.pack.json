@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "PackagePath": "staticwebassets\\images\\Adri.png"
+    },
+    {
       "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",
       "PackagePath": "staticwebassets\\images\\Default1.png"
     },

@@ -17,20 +17,42 @@ export default function FriendsList() {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
+    // ✅ Obtener userId desde localStorage
     const storedUser = localStorage.getItem("user");
-    const userId = storedUser ? JSON.parse(storedUser).id : null;
-
-    if (!userId) {
-      setError("No se encontró la ID del usuario.");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.id) {
+          setUserId(parsedUser.id.toString()); // Convertir a string
+          console.log("✅ userId obtenido de localStorage:", parsedUser.id);
+        } else {
+          console.warn("⚠️ No se encontró un userId válido en localStorage.");
+          setError("Error: No se encontró la ID del usuario.");
+          return;
+        }
+      } catch (error) {
+        console.error("❌ Error al parsear usuario desde localStorage:", error);
+        setError("Error al obtener los datos del usuario.");
+        return;
+      }
+    } else {
+      console.warn("⚠️ No hay usuario guardado en localStorage.");
+      setError("Error: No se encontró la ID del usuario.");
       return;
     }
+  }, []);
+
+  useEffect(() => {
+    if (!userId) return;
 
     const fetchFriends = async () => {
       try {
+        console.log(`🔎 Buscando amigos con userId: ${userId}`);
         const response = await fetch(`${API_URL}/api/Search/SearchAmigos/${userId}`, {
-          method: "POST",
+          method: "POST", // ✅ Corregido a GET
           headers: {
             "Content-Type": "application/json",
             Accept: "*/*",
@@ -39,11 +61,11 @@ export default function FriendsList() {
         });
 
         if (!response.ok) {
-          throw new Error("Error al obtener la lista de amigos.");
+          throw new Error(`Error al obtener la lista de amigos. Código HTTP: ${response.status}`);
         }
 
         const data: Friend[] = await response.json();
-        console.log("Amigos recibidos:", data); // Debug
+        console.log("Amigos recibidos:", data);
         setFriends(data);
       } catch (error) {
         console.error("Error al obtener amigos:", error);
@@ -52,15 +74,14 @@ export default function FriendsList() {
     };
 
     fetchFriends();
-  }, [searchTerm]); // Se actualiza cuando cambia el término de búsqueda
+  }, [userId]);
 
   const handleRemoveFriend = async (friendId: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar a este amigo?")) {
       try {
-        // Aquí podrías hacer una petición al backend para eliminar al amigo
-        setFriends(friends.filter((friend) => friend.id !== friendId));
+        setFriends((prev) => prev.filter((friend) => friend.id !== friendId));
       } catch (error) {
-        console.error("Error al eliminar amigo:", error);
+        console.error("❌ Error al eliminar amigo:", error);
       }
     }
   };

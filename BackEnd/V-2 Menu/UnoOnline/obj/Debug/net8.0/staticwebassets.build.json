@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "y4k6TmxFY4e5z0AMiRaZgpVID/C6ahllF1ufHYzR94Y=",
+  "Hash": "XHqkuqM5JsOoHvw8++epRQNqqMBzFWTbeCYEWaoDFaA=",
   "Source": "UnoOnline",
   "BasePath": "_content/UnoOnline",
   "Mode": "Default",
@@ -16,6 +16,27 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Adri#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rt5ga5mdub",
+      "Integrity": "gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Adri.png"
+    },
     {
       "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",
       "SourceId": "UnoOnline",
@@ -102,6 +123,88 @@
     }
   ],
   "Endpoints": [
+    {
+      "Route": "images/Adri.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "86970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 14:40:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo="
+        }
+      ]
+    },
+    {
+      "Route": "images/Adri.rt5ga5mdub.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "86970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 14:40:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rt5ga5mdub"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Adri.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo="
+        }
+      ]
+    },
     {
       "Route": "images/Default1.5cuhas3ev8.png",
       "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",

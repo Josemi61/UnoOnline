@@ -27,13 +27,13 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
       return;
     }
 
-    if (!validatePassword(password)) {
-      setError(
-        "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales."
-      );
-      setIsLoading(false);
-      return;
-    }
+    // if (!validatePassword(password)) {
+    //   setError(
+    //     "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales."
+    //   );
+    //   setIsLoading(false);
+    //   return;
+    // }
 
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
