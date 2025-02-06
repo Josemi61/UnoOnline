@@ -4,6 +4,7 @@ using System.Net.WebSockets;
 using System.Text;
 using UnoOnline.Models;
 using UnoOnline.Interfaces;
+using Microsoft.Extensions.Hosting;
 
 namespace UnoOnline.WebSockets;
 
@@ -87,6 +88,12 @@ public class WebSocketHandler
                     case "JoinGame":
                         await HandleJoinGame(requestData);
                         break;
+                    case "PlayAgainstBot":
+                        await HandlePlayAgainstBot(requestData);
+                        break;
+                    case "JoinRandomRoom":
+                        await HandleJoinRandomRoom(requestData);
+                        break;
                     default:
                         Console.WriteLine($"⚠️ Tipo de mensaje desconocido: {messageType}");
                         break;
@@ -108,6 +115,95 @@ public class WebSocketHandler
             }
         }
     }
+
+    private async Task HandleJoinRandomRoom(string requestData)
+    {
+        if (!int.TryParse(requestData, out int playerId))
+        {
+            Console.WriteLine("⚠️ Formato inválido para JoinRandomRoom. Debe ser 'JoinRandomRoom|playerId'");
+            return;
+        }
+
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
+
+            // Buscar una sala disponible
+            var availableRoom = await gameRoomRepository.GetAvailableRoomAsync();
+
+            if (availableRoom != null)
+            {
+                // Unir al jugador a la sala
+                bool joined = await gameRoomRepository.AddGuestToRoomAsync(availableRoom.RoomId, playerId);
+                if (!joined)
+                {
+                    Console.WriteLine($"❌ No se pudo unir el jugador {playerId} a la sala {availableRoom.RoomId}");
+                    return;
+                }
+
+                Console.WriteLine($"✅ Jugador {playerId} unido a la sala {availableRoom.RoomId}");
+
+                // Notificar a ambos jugadores
+                NotifyPlayersGameStarted(availableRoom.HostId, playerId, availableRoom.RoomId);
+            }
+            else
+            {
+                // Crear una nueva sala si no hay disponibles
+                var newRoom = await gameRoomRepository.CreateRoomAsync(playerId);
+
+                Console.WriteLine($"🆕 Creada nueva sala {newRoom.RoomId} para jugador {playerId}, esperando oponente...");
+            }
+        }
+    }
+
+
+    // Función para notificar a ambos jugadores cuando la partida empieza
+    private async void NotifyPlayersGameStarted(int hostId, int guestId, string roomId)
+    {
+        foreach (var playerId in new[] { hostId, guestId })
+        {
+            if (_connections.TryGetValue(playerId.ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
+            {
+                string message = $"GameStarted|{roomId},{hostId},{guestId}";
+                var bytes = Encoding.UTF8.GetBytes(message);
+                await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+        }
+    }
+
+
+    private async Task HandlePlayAgainstBot(string requestData)
+    {
+        if (!int.TryParse(requestData, out int playerId))
+        {
+            Console.WriteLine("⚠️ Formato inválido para PlayAgainstBot. Debe ser 'PlayAgainstBot|playerId'");
+            return;
+        }
+
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
+
+            // Crear una nueva sala con el bot (-1 como GuestId)
+            bool success = await gameRoomRepository.ConvertRoomToBotGameAsync(playerId);
+
+            if (success)
+            {
+                Console.WriteLine($"🤖 Sala del host {playerId} convertida en partida contra el bot.");
+
+                // Notificar al host
+                var message = $"GameUpdated|{playerId},BOT";
+                var bytes = Encoding.UTF8.GetBytes(message);
+
+                if (_connections.TryGetValue(playerId.ToString(), out var webSocket) && webSocket.State == WebSocketState.Open)
+                {
+                    await webSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                }
+            }
+        }
+    }
+
+
 
     private async Task HandleCreateRoom(string requestData)
     {

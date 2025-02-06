@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UnoOnline.Interfaces;
 using UnoOnline.Repositories;
 
 namespace UnoOnline.Controllers

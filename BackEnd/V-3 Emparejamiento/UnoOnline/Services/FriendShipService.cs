@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using UnoOnline.Repositories;
 using UnoOnline.Models;
+using UnoOnline.Interfaces;
 
 namespace Memory.Service
 {
