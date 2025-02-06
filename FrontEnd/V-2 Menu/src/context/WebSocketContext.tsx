@@ -58,23 +58,33 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
 
     ws.onmessage = (event: MessageEvent) => {
       try {
-        const newMessage = JSON.parse(event.data);
-        console.log("📩 Mensaje recibido:", newMessage);
-
-        // Asegurar que si el mensaje está vacío, no cierre WebSocket
-        if (!newMessage || Object.keys(newMessage).length === 0) {
-          console.warn("⚠️ WebSocket recibió un mensaje vacío, pero se mantiene abierto.");
-          return;
+        console.log("📩 Mensaje recibido:", event.data);
+    
+        // Verificamos si el mensaje es JSON o texto con formato personalizado
+        if (event.data.startsWith("{") || event.data.startsWith("[")) {
+          // Si el mensaje parece ser un JSON, lo parseamos
+          const newMessage = JSON.parse(event.data);
+          setMessages((prevMessages) => ({
+            ...prevMessages,
+            ...newMessage,
+          }));
+        } else {
+          // Si el mensaje es un string con formato "Tipo|Datos"
+          const [type, data] = event.data.split("|");
+    
+          console.log(`📌 Mensaje WebSocket procesado: Tipo=${type}, Datos=${data}`);
+    
+          if (type === "FriendRequest") {
+            console.log("📨 Nueva solicitud de amistad:", data);
+            // Aquí podrías actualizar el estado con la nueva solicitud de amistad
+          }
+    
+          // Agrega más condiciones si hay más tipos de mensajes WebSocket
         }
-
-        setMessages((prevMessages) => ({
-          ...prevMessages,
-          ...newMessage,
-        }));
       } catch (error) {
-        console.error("❌ Error al parsear mensaje WebSocket:", error);
+        console.error("❌ Error al procesar mensaje WebSocket:", error);
       }
-    };
+    };    
 
     return () => {
       console.log("🔌 WebSocket desconectado para userId:", user.id);

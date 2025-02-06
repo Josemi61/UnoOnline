@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 interface Request {
   id: string;
@@ -17,23 +16,44 @@ interface Request {
 export default function RequestsModal({ onClose, userId }: { onClose: () => void; userId?: string }) {
   const [requests, setRequests] = useState<Request[]>([]);
   const [socket, setSocket] = useState<WebSocket | null>(null);
-  const router = useRouter();
+  const [resolvedUserId, setResolvedUserId] = useState<string | undefined>(userId);
 
   useEffect(() => {
-    // **1. Verificar que userId está definido antes de hacer cualquier fetch**
-    if (!userId) {
-      console.error("⚠️ userId no está definido, evitando fetch y WebSocket.");
+    // Si userId es undefined, intenta obtenerlo de localStorage
+    if (!resolvedUserId) {
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) {
+        try {
+          const parsedUser = JSON.parse(storedUser);
+          if (parsedUser.id) {
+            setResolvedUserId(parsedUser.id.toString()); // Asegurar que es string
+            console.log("✅ userId obtenido de localStorage:", parsedUser.id);
+          } else {
+            console.warn("⚠️ El usuario en localStorage no tiene ID válido.");
+          }
+        } catch (error) {
+          console.error("❌ Error al parsear usuario desde localStorage:", error);
+        }
+      } else {
+        console.warn("⚠️ No hay usuario en localStorage.");
+      }
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (!resolvedUserId) {
+      console.error("⚠️ userId sigue sin estar definido, evitando fetch y WebSocket.");
       return;
     }
 
-    // **2. Cargar solicitudes pendientes desde la API**
+    // ✅ Cargar solicitudes pendientes desde la API
     const fetchPendingRequests = async () => {
       try {
-        const response = await fetch(`https://localhost:7201/api/friendship/friends/${userId}`);
+        const response = await fetch(`https://localhost:7201/api/friendship/friends/${resolvedUserId}`);
         if (!response.ok) throw new Error("Error al obtener las solicitudes pendientes.");
         const data = await response.json();
 
-        // **3. Transformar datos en el formato adecuado**
+        // ✅ Transformar datos al formato adecuado
         const formattedRequests = data.map((req: any) => ({
           id: req.id,
           type: "friend",
@@ -52,13 +72,11 @@ export default function RequestsModal({ onClose, userId }: { onClose: () => void
 
     fetchPendingRequests();
 
-    // **4. Establecer conexión WebSocket solo si userId está definido**
-    if (!userId) return;
-
-    const ws = new WebSocket(`wss://localhost:7201/api/websocket/connect?userId=${userId}`);
+    // ✅ Establecer conexión WebSocket solo si userId está definido
+    const ws = new WebSocket(`wss://localhost:7201/api/websocket/connect?userId=${resolvedUserId}`);
 
     ws.onopen = () => {
-      console.log("🔗 WebSocket conectado correctamente.");
+      console.log("✅ WebSocket conectado correctamente.");
       setSocket(ws);
     };
 
@@ -69,7 +87,7 @@ export default function RequestsModal({ onClose, userId }: { onClose: () => void
         if (type === "FriendRequest") {
           const [senderId, receiverId, senderNickname, senderAvatar] = data.split(",");
 
-          if (receiverId === userId) {
+          if (receiverId === resolvedUserId) {
             setRequests((prevRequests) => [
               ...prevRequests,
               {
@@ -101,10 +119,11 @@ export default function RequestsModal({ onClose, userId }: { onClose: () => void
     return () => {
       ws.close();
     };
-  }, [userId]);
+  }, [resolvedUserId]);
 
+  // ✅ Manejo de aceptar o rechazar solicitud con WebSocket
   const handleAcceptOrReject = (requestId: string, accepted: boolean) => {
-    if (!socket) {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
       console.error("🚨 WebSocket no está conectado.");
       return;
     }
@@ -115,6 +134,7 @@ export default function RequestsModal({ onClose, userId }: { onClose: () => void
 
     setRequests((prevRequests) => prevRequests.filter((r) => r.id !== requestId));
   };
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
