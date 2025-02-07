@@ -15,6 +15,7 @@ export interface UserProfileProps {
   onLogout: () => void;
 }
 
+
 export default function UserProfile({ onLogout }: { onLogout: () => void }) {
   const [user, setUser] = useState<UserProfileProps["user"] | null>(null);
   const [showEditForm, setShowEditForm] = useState(false); // Estado para controlar el modal

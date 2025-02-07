@@ -8,6 +8,7 @@ import UserSearchModal from "@/components/UserSearchModal"
 import RequestsModal from "@/components/RequestsModal"
 import GameStats from "@/components/GameStats"
 
+
 export default function MenuPage() {
   const [showUserSearch, setShowUserSearch] = useState(false)
   const [showRequests, setShowRequests] = useState(false)
@@ -44,7 +45,12 @@ export default function MenuPage() {
             Buscar Usuarios
           </button>
         </div>
-        {showFriendsList && <FriendsList />}
+        {showFriendsList && (
+          <FriendsList
+            onSelectFriend={() => {}}
+            onClose={() => setShowFriendsList(false)}
+          />
+        )}
         <GameStats stats={{
                   connectedPlayers: 0,
                   activeGames: 0,

@@ -55,18 +55,43 @@ namespace UnoOnline.Repositories
             return await _context.GameRooms.FirstOrDefaultAsync(r => r.GuestId == null && r.IsActive);
         }
 
-        public async Task<bool> ConvertRoomToBotGameAsync(int hostId)
+        public async Task<bool> ConvertRoomToBotGameAsync(string roomId)
         {
-            var room = await _context.GameRooms.FirstOrDefaultAsync(r => r.HostId == hostId && r.IsActive);
-            if (room == null || room.GuestId != null)
+            var room = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId && r.IsActive);
+
+            if (room == null)
+            {
+                Console.WriteLine($"❌ No se encontró una sala activa con ID {roomId}.");
                 return false;
+            }
+
+            if (room.GuestId != null && room.GuestId != 0)
+            {
+                Console.WriteLine($"⚠️ La sala ya tiene un invitado asignado (GuestId={room.GuestId}), no se puede convertir.");
+                return false;
+            }
 
             room.GuestId = -1; // Asignar el bot como oponente
+            _context.Entry(room).State = EntityState.Modified; // Asegurar que se detecta el cambio
+            await _context.SaveChangesAsync();
+
+            // Confirmar que se guardó correctamente
+            var updatedRoom = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId);
+            Console.WriteLine($"🔍 Verificación post-actualización: GuestId={updatedRoom?.GuestId}");
+
+            return updatedRoom?.GuestId == -1;
+        }
+
+        public async Task<bool> EndGameAsync(string roomId)
+        {
+            var room = await GetRoomByIdAsync(roomId);
+            if (room == null)
+                return false;
+
+            room.IsActive = false; // Desactivamos la sala
             await _context.SaveChangesAsync();
             return true;
         }
-
-
     }
 }
 

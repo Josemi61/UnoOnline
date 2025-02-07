@@ -11,35 +11,35 @@ interface Friend {
   status: "connected" | "disconnected" | "playing";
 }
 
+interface FriendsListProps {
+  onSelectFriend: (friend: Friend) => void; // ✅ Añadimos la prop
+  onClose: () => void; // ✅ Añadimos la prop
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7201";
 
-export default function FriendsList() {
+export default function FriendsList({ onSelectFriend, onClose }: FriendsListProps) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
-    // ✅ Obtener userId desde localStorage
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         if (parsedUser.id) {
-          setUserId(parsedUser.id.toString()); // Convertir a string
-          console.log("✅ userId obtenido de localStorage:", parsedUser.id);
+          setUserId(parsedUser.id.toString());
         } else {
-          console.warn("⚠️ No se encontró un userId válido en localStorage.");
           setError("Error: No se encontró la ID del usuario.");
           return;
         }
       } catch (error) {
-        console.error("❌ Error al parsear usuario desde localStorage:", error);
         setError("Error al obtener los datos del usuario.");
         return;
       }
     } else {
-      console.warn("⚠️ No hay usuario guardado en localStorage.");
       setError("Error: No se encontró la ID del usuario.");
       return;
     }
@@ -50,9 +50,8 @@ export default function FriendsList() {
 
     const fetchFriends = async () => {
       try {
-        console.log(`🔎 Buscando amigos con userId: ${userId}`);
         const response = await fetch(`${API_URL}/api/Search/SearchAmigos/${userId}`, {
-          method: "POST", // ✅ Corregido a GET
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
             Accept: "*/*",
@@ -65,10 +64,8 @@ export default function FriendsList() {
         }
 
         const data: Friend[] = await response.json();
-        console.log("Amigos recibidos:", data);
         setFriends(data);
       } catch (error) {
-        console.error("Error al obtener amigos:", error);
         setError("No se pudo obtener la lista de amigos.");
       }
     };
@@ -81,26 +78,19 @@ export default function FriendsList() {
       try {
         setFriends((prev) => prev.filter((friend) => friend.id !== friendId));
       } catch (error) {
-        console.error("❌ Error al eliminar amigo:", error);
+        console.error("Error al eliminar amigo:", error);
       }
     }
   };
 
   const filteredFriends = friends.filter((friend) =>
-    (friend.apodo || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .includes(
-        searchTerm
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-      )
+    friend.apodo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 p-4 bg-gray-800 text-white rounded-lg shadow-lg">
+      <h2 className="text-xl font-bold mb-4">Lista de Amigos</h2>
+
       <input
         type="text"
         placeholder="Buscar amigos..."
@@ -108,6 +98,7 @@ export default function FriendsList() {
         onChange={(e) => setSearchTerm(e.target.value)}
         className="w-full p-2 rounded bg-white/10 text-white placeholder-gray-300 mb-4"
       />
+
       {error ? (
         <p className="text-red-500 text-sm text-center">{error}</p>
       ) : (
@@ -115,14 +106,9 @@ export default function FriendsList() {
           {filteredFriends.map((friend) => (
             <li key={friend.id} className="flex items-center justify-between bg-white/10 p-4 rounded-lg">
               <div className="flex items-center">
-                {/* Handle avatar image rendering */}
                 <Image
-                  src={
-                    friend.avatar?.startsWith("http")
-                      ? friend.avatar
-                      : `/images/${friend.avatar || "placeholder.svg"}`
-                  }
-                  alt={friend.apodo || "Imagen de usuario"}
+                  src={friend.avatar?.startsWith("http") ? friend.avatar : `/images/${friend.avatar || "placeholder.svg"}`}
+                  alt={friend.apodo}
                   width={35}
                   height={35}
                   className="rounded-full mr-4"
@@ -154,11 +140,22 @@ export default function FriendsList() {
                 <button onClick={() => handleRemoveFriend(friend.id)} className="text-red-400 hover:text-red-200">
                   Eliminar Amigo
                 </button>
+                {/* Botón para seleccionar un amigo */}
+                <button onClick={() => onSelectFriend(friend)} className="ml-4 bg-blue-500 text-white px-2 py-1 rounded">
+                  Invitar
+                </button>
               </div>
             </li>
           ))}
         </ul>
       )}
+
+      {/* Botón para cerrar la lista */}
+      <div className="text-center mt-4">
+        <button onClick={onClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+          Cerrar
+        </button>
+      </div>
     </div>
   );
 }

@@ -3,7 +3,7 @@ using UnoOnline.Repositories;
 
 namespace UnoOnline.Controllers
 {
-    [Route("api/friendship")]
+    [Route("api/")]
     [ApiController]
     public class FriendshipController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace UnoOnline.Controllers
             _friendshipRepository = friendshipRepository;
         }
 
-        [HttpGet("friends/{userId}")]
+        [HttpGet("friendsPendig/{userId}")]
         public async Task<IActionResult> GetFriends(int userId)
         {
             var friends = await _friendshipRepository.GetFriends(userId);

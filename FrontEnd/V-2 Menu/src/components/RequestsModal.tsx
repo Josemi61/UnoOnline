@@ -49,7 +49,7 @@ export default function RequestsModal({ onClose, userId }: { onClose: () => void
     // ✅ Cargar solicitudes pendientes desde la API
     const fetchPendingRequests = async () => {
       try {
-        const response = await fetch(`https://localhost:7201/api/friendship/friends/${resolvedUserId}`);
+        const response = await fetch(`https://localhost:7201/api/friendsPending/${resolvedUserId}`);
         if (!response.ok) throw new Error("Error al obtener las solicitudes pendientes.");
         const data = await response.json();
 

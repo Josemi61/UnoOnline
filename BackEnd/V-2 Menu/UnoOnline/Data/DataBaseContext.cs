@@ -12,6 +12,7 @@ namespace UnoOnline.Data
         public DbSet<User> Users { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
 
+
         //public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
 
         //protected override void OnConfiguring(DbContextOptionsBuilder options)
