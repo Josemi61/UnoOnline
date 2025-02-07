@@ -10,6 +10,7 @@ using System.Text;
 using UnoOnline.Data;
 using UnoOnline.DataMappers;
 using UnoOnline.Interfaces;
+using UnoOnline.Middleware;
 using UnoOnline.Models;
 using UnoOnline.Repositories;
 using UnoOnline.WebSockets;
@@ -101,8 +102,9 @@ namespace UnoOnline
                 app.UseSwaggerUI();
             }
 
+            app.UseMiddleware<middleware>();
             app.UseCors("AllowAllOrigins"); // Aplica la pol�tica de CORS
-
+            app.UseRouting();
             app.UseWebSockets();
             app.UseHttpsRedirection();
             app.UseAuthentication();

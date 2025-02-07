@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\jmtor\\Documents\\Proyecto Uno\\BackEnd\\V-3 Emparejamiento\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\jmtor\\documents\\proyecto uno\\backend\\v-3 emparejamiento\\unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,24 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 822,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{c9c0ae26-aa77-11d2-b3f0-0000f87570ee}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "WebSocketHandler.cs",
-              "DocumentMoniker": "C:\\Users\\jmtor\\Documents\\Proyecto Uno\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "ToolTip": "C:\\Users\\jmtor\\Documents\\Proyecto Uno\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "RelativeToolTip": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAAAHsAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T15:37:24.406Z",
-              "EditorCaption": ""
             }
           ]
         }
