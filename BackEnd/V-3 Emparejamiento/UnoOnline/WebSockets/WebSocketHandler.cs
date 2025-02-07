@@ -5,6 +5,7 @@ using System.Text;
 using UnoOnline.Models;
 using UnoOnline.Interfaces;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
 
 namespace UnoOnline.WebSockets;
 
@@ -94,6 +95,9 @@ public class WebSocketHandler
                     case "JoinRandomRoom":
                         await HandleJoinRandomRoom(requestData);
                         break;
+                    case "EndGame":
+                        await HandleEndGame(requestData);
+                        break;
                     default:
                         Console.WriteLine($"⚠️ Tipo de mensaje desconocido: {messageType}");
                         break;
@@ -115,6 +119,35 @@ public class WebSocketHandler
             }
         }
     }
+
+    private async Task HandleEndGame(string requestData)
+    {
+        if (string.IsNullOrWhiteSpace(requestData))
+        {
+            Console.WriteLine("⚠️ Formato inválido para EndGame. Debe ser 'EndGame|roomId'");
+            return;
+        }
+
+        string roomId = requestData;
+
+        using (var scope = _scopeFactory.CreateScope())
+        {
+            var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
+
+            bool success = await gameRoomRepository.EndGameAsync(roomId);
+
+            if (success)
+            {
+                Console.WriteLine($"✅ Partida {roomId} finalizada y marcada como inactiva.");
+            }
+            else
+            {
+                Console.WriteLine($"❌ No se pudo finalizar la partida {roomId}.");
+            }
+        }
+    }
+
+
 
     private async Task HandleJoinRandomRoom(string requestData)
     {

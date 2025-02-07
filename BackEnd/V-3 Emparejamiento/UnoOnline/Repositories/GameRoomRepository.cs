@@ -82,6 +82,16 @@ namespace UnoOnline.Repositories
             return updatedRoom?.GuestId == -1;
         }
 
+        public async Task<bool> EndGameAsync(string roomId)
+        {
+            var room = await GetRoomByIdAsync(roomId);
+            if (room == null)
+                return false;
+
+            room.IsActive = false; // Desactivamos la sala
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 }
 
