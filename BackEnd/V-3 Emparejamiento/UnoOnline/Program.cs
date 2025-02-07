@@ -47,7 +47,8 @@ namespace UnoOnline
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
             builder.Services.AddSingleton<WebSocketHandler>();
             builder.Services.AddScoped<DataBaseContext>();
-            
+            builder.Services.AddScoped<middleware>();
+
             // Swagger configuration
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -102,14 +103,15 @@ namespace UnoOnline
                 app.UseSwaggerUI();
             }
 
-            app.UseMiddleware<middleware>();
-            app.UseCors("AllowAllOrigins"); // Aplica la pol�tica de CORS
-            app.UseRouting();
             app.UseWebSockets();
+            app.UseMiddleware<middleware>();         
             app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
+
+            app.UseCors("AllowAllOrigins");
             app.MapControllers();
             app.Run();
         }
