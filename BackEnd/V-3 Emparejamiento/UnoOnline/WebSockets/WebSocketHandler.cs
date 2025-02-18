@@ -6,6 +6,7 @@ using UnoOnline.Models;
 using UnoOnline.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace UnoOnline.WebSockets;
 
@@ -13,6 +14,8 @@ public class WebSocketHandler
 {
     private static readonly ConcurrentDictionary<string, WebSocket> _connections = new();
     private static readonly ConcurrentDictionary<string, GameRoom> _gameRooms = new();
+    private static ConcurrentQueue<int> _waitingPlayers = new();
+    private static readonly ConcurrentDictionary<int, bool> _connectedPlayers = new();
     private static int _connectedUsers = 0;
     private readonly IServiceScopeFactory _scopeFactory;
 
@@ -112,6 +115,15 @@ public class WebSocketHandler
         {
             _connections.TryRemove(userId, out _);
             Interlocked.Decrement(ref _connectedUsers);
+
+            if (int.TryParse(userId, out int parsedUserId))
+            {
+                _connectedPlayers.TryRemove(parsedUserId, out _);
+            }
+
+            //_waitingPlayers = new Queue<int>(_waitingPlayers.Where(id => id != userId));
+
+
             Console.WriteLine($"❌ Usuario {userId} desconectado. Total conectados: {_connectedUsers}");
             if (webSocket.State == WebSocketState.Open)
             {
@@ -157,37 +169,71 @@ public class WebSocketHandler
             return;
         }
 
-        using (var scope = _scopeFactory.CreateScope())
+        // Marcar jugador como conectado
+        _connectedPlayers[playerId] = true;
+
+        // Agregar jugador a la cola de espera
+        _waitingPlayers.Enqueue(playerId);
+        Console.WriteLine($"🔄 Jugador {playerId} agregado a la cola de espera.");
+
+        // Verificar si hay al menos dos jugadores en espera
+        while (_waitingPlayers.Count >= 2)
         {
-            var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
-
-            // Buscar una sala disponible
-            var availableRoom = await gameRoomRepository.GetAvailableRoomAsync();
-
-            if (availableRoom != null)
+            if (_waitingPlayers.TryDequeue(out int player1) && _waitingPlayers.TryDequeue(out int player2))
             {
-                // Unir al jugador a la sala
-                bool joined = await gameRoomRepository.AddGuestToRoomAsync(availableRoom.RoomId, playerId);
-                if (!joined)
+                // Verificar si ambos jugadores siguen conectados
+                if (!_connectedPlayers.GetValueOrDefault(player1, false))
                 {
-                    Console.WriteLine($"❌ No se pudo unir el jugador {playerId} a la sala {availableRoom.RoomId}");
-                    return;
+                    Console.WriteLine($"❌ Jugador {player1} se desconectó antes del emparejamiento. Devolviendo {player2} a la cola.");
+                    _waitingPlayers.Enqueue(player2);
+                    continue;
+                }
+                if (!_connectedPlayers.GetValueOrDefault(player2, false))
+                {
+                    Console.WriteLine($"❌ Jugador {player2} se desconectó antes del emparejamiento. Devolviendo {player1} a la cola.");
+                    _waitingPlayers.Enqueue(player1);
+                    continue;
                 }
 
-                Console.WriteLine($"✅ Jugador {playerId} unido a la sala {availableRoom.RoomId}");
+                using (var scope = _scopeFactory.CreateScope())
+                {
+                    var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
 
-                // Notificar a ambos jugadores
-                NotifyPlayersGameStarted(availableRoom.HostId, playerId, availableRoom.RoomId);
-            }
-            else
-            {
-                // Crear una nueva sala si no hay disponibles
-                var newRoom = await gameRoomRepository.CreateRoomAsync(playerId);
+                    // Crear una nueva sala con los dos jugadores
+                    var newRoom = await gameRoomRepository.CreateRoomAsync(player1);
+                    bool joined = await gameRoomRepository.AddGuestToRoomAsync(newRoom.RoomId, player2);
 
-                Console.WriteLine($"🆕 Creada nueva sala {newRoom.RoomId} para jugador {playerId}, esperando oponente...");
+                    if (joined)
+                    {
+                        Console.WriteLine($"✅ Partida creada: Sala {newRoom.RoomId} con {player1} y {player2}");
+                        NotifyPlayersGameStarted(player1, player2, newRoom.RoomId);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"❌ No se pudo unir {player2} a la sala {newRoom.RoomId}");
+                    }
+                }
             }
         }
+        Console.WriteLine("⏳ Esperando más jugadores en la cola...");
     }
+
+
+    public void HandlePlayerDisconnect(int playerId)
+    {
+        if (_connectedPlayers.TryRemove(playerId, out _))
+        {
+            Console.WriteLine($"🔌 Jugador {playerId} se desconectó y fue eliminado de la lista de jugadores conectados.");
+        }
+
+        // Crear una nueva cola sin el jugador desconectado
+        var nuevaCola = new ConcurrentQueue<int>(_waitingPlayers.Where(p => p != playerId));
+        Interlocked.Exchange(ref _waitingPlayers, nuevaCola);
+
+        Console.WriteLine($"🚀 Jugador {playerId} eliminado de la cola de espera.");
+    }
+
+
 
 
     // Función para notificar a ambos jugadores cuando la partida empieza
@@ -265,11 +311,6 @@ public class WebSocketHandler
             }
         }
     }
-
-
-
-
-
 
     private async Task HandleCreateRoom(string requestData)
     {

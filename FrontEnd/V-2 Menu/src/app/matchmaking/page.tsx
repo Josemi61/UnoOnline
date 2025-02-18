@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import PlayerCard from "@/components/PlayerCard";
 import FriendsList from "@/components/FriendsList";
-import WaitingRoom from "@/components/WaitingRoom";
+import { useWebSocket, WebSocketContext } from "@/context/WebSocketContext";
 
 interface Player {
   id: string;
@@ -17,11 +17,12 @@ const WS_URL = "wss://localhost:7201/api/websocket/connect";
 export default function MatchmakingView() {
   const [isHost, setIsHost] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
-  const [opponent, setOpponent] = useState<Player | null>(null);
   const [showFriendsList, setShowFriendsList] = useState(false);
-  const [roomId, setRoomId] = useState<string | null>(null);
-  const [socket, setSocket] = useState<WebSocket | null>(null);
+  const socketRef = useRef<WebSocket | null>(null);
   const router = useRouter();
+  const {roomId, setRoomId, socket, opponent, isSearching, invitation, setOpponent, setIsSearching, setInvitation} = useWebSocket();
+
+  
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -32,63 +33,74 @@ export default function MatchmakingView() {
         apodo: parsedUser.apodo,
         avatar: `https://localhost:7201/images/${parsedUser.avatar}`,
       });
-      connectWebSocket(parsedUser.id);
     }
   }, []);
 
-  const connectWebSocket = (userId: string) => {
-    const ws = new WebSocket(`${WS_URL}?userId=${userId}`);
-    ws.onmessage = (event) => {
-      const message = event.data.split("|");
-      if (message[0] === "RoomCreated") {
-        setRoomId(message[1]);
-      } else if (message[0] === "GameStarted") {
-        router.push(`/game?roomId=${message[1]}`);
-      }
-    };
-    ws.onerror = (err) => console.error("WebSocket error:", err);
-    setSocket(ws);
-  };
+
 
   const handleCreateRoom = () => {
-    if (!currentPlayer || !socket) return;
-    socket.send(`CreateRoom|${currentPlayer.id}`);
+    if (!currentPlayer) return;
+    setRoomId(null);
+    setOpponent(null);
+    sendMessage(`CreateRoom|${currentPlayer.id}`);
   };
 
-console.log(roomId);
+  const handlePlayRandom = () => {
+    if (!currentPlayer) return;
+    setIsSearching(true);
+    sendMessage(`JoinRandomRoom|${currentPlayer.id}`);
+  };
 
   const handlePlayBot = () => {
-    if (!roomId || !socket) return;
-    socket.send(`PlayAgainstBot|${roomId}`);
+    if (!roomId) return;
+    sendMessage(`PlayAgainstBot|${roomId}`);
     setOpponent({ id: "bot", apodo: "Bot UNO", avatar: "/images/bot-avatar.png" });
   };
+
 
   const handleInviteFriend = () => {
     setShowFriendsList(true);
   };
 
   const handleSelectFriend = (friend: Player) => {
-    if (!roomId || !currentPlayer || !socket) return;
+    if (!roomId) return;
     setOpponent(friend);
     setShowFriendsList(false);
-    socket.send(`InviteFriend|${roomId},${friend.id}`);
+    sendMessage(`InviteFriend|${roomId},${friend.id}`);
+    console.log(`📩 Enviando invitación a ${friend.id} para unirse a la sala ${roomId}`);
+  };
+
+  const handleAcceptInvitation = () => {
+    if (!invitation || !currentPlayer) return;
+    sendMessage(`JoinGame|${currentPlayer.id},${invitation.roomId}`);
+    setRoomId(invitation.roomId);
+    setInvitation(null);
+  };
+
+  const handleRejectInvitation = () => {
+    setInvitation(null);
   };
 
   const handleLeave = () => {
-    socket?.close();
+    socketRef.current?.close();
     router.push("/menu");
   };
 
-  if (!currentPlayer) {
-    return <div>Cargando...</div>;
-  }
+  const sendMessage = (message: string) => {
+   
+    if (socket) {
+      socket.send(message);
+    }
+  };
+
+  console.log(roomId);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-blue-800 p-8">
       <h1 className="text-4xl font-bold text-white mb-8 text-center">Emparejamiento</h1>
 
       <div className="flex justify-center space-x-8 mb-8">
-        <PlayerCard player={currentPlayer} isHost={isHost} />
+        {currentPlayer && <PlayerCard player={currentPlayer} isHost={isHost} />}
         {opponent ? (
           <PlayerCard player={opponent} isHost={!isHost} />
         ) : (
@@ -106,6 +118,14 @@ console.log(roomId);
           >
             Crear Sala
           </button>
+          {!isSearching && (
+            <button
+              onClick={handlePlayRandom}
+              className="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded ml-4"
+            >
+              Buscar Partida Aleatoria
+            </button>
+          )}
         </div>
       )}
 
@@ -128,6 +148,14 @@ console.log(roomId);
 
       {showFriendsList && (
         <FriendsList onSelectFriend={handleSelectFriend} onClose={() => setShowFriendsList(false)} />
+      )}
+
+      {invitation && (
+        <div className="text-center mt-8 bg-gray-800 p-4 rounded-lg">
+          <p className="text-white">Te han invitado a una sala</p>
+          <button onClick={handleAcceptInvitation} className="bg-green-500 px-4 py-2 m-2 rounded">Aceptar</button>
+          <button onClick={handleRejectInvitation} className="bg-red-500 px-4 py-2 m-2 rounded">Rechazar</button>
+        </div>
       )}
 
       <div className="text-center mt-8">

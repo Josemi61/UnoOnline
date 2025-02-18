@@ -3,16 +3,8 @@
   "WorkspaceRootPath": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-3 emparejamiento\\unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-3 emparejamiento\\unoonline\\interfaces\\igameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\interfaces\\igameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-3 emparejamiento\\unoonline\\repositories\\gameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\repositories\\gameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-3 emparejamiento\\unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,43 +14,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 822,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "GameRoomRepository.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Repositories\\GameRoomRepository.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Repositories\\GameRoomRepository.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Repositories\\GameRoomRepository.cs",
-              "RelativeToolTip": "UnoOnline\\Repositories\\GameRoomRepository.cs",
-              "ViewState": "AgIAAEUAAAAAAAAAAAAYwF0AAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T10:06:57.973Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IGameRoomRepository.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Interfaces\\IGameRoomRepository.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Interfaces\\IGameRoomRepository.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Interfaces\\IGameRoomRepository.cs",
-              "RelativeToolTip": "UnoOnline\\Interfaces\\IGameRoomRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAvAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T10:05:50.937Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "WebSocketHandler.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "RelativeToolTip": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAuwJQAAAAAAAAAAAAAAA==",
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Program.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Program.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\Program.cs",
+              "RelativeToolTip": "UnoOnline\\Program.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAQwDEAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-06T15:37:24.406Z",
+              "WhenOpened": "2025-02-07T16:37:54.692Z",
               "EditorCaption": ""
             }
           ]

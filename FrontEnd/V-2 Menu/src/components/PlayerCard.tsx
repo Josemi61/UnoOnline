@@ -10,15 +10,16 @@ interface PlayerCardProps {
 
 export default function PlayerCard({ player, isHost }: PlayerCardProps) {
   return (
-    <div className="bg-white rounded-lg p-4 w-64">
+    <div className="w-64 h-64 bg-white/10 p-4 rounded-lg flex flex-col items-center">
       <div className="relative w-48 h-48 mx-auto mb-4">
-        <Image
-          src={player.avatar || "/placeholder.svg"}
-          alt={`Avatar de ${player.apodo}`}
-          layout="fill"
-          objectFit="cover"
-          className="rounded-full"
-        />
+      <Image
+            src={player.avatar}
+            alt={`Avatar de ${player.apodo}`}
+            width={80}
+            height={80}
+            className="rounded-full"
+            unoptimized
+          />
         {isHost && (
           <div className="absolute top-0 right-0 bg-yellow-500 text-white text-xs font-bold px-2 py-1 rounded-full">
             Anfitrión
@@ -29,4 +30,3 @@ export default function PlayerCard({ player, isHost }: PlayerCardProps) {
     </div>
   )
 }
-

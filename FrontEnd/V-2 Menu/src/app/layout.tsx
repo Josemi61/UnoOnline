@@ -27,10 +27,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthProvider>
-      <WebSocketProvider> {/* Usamos WebSocketProvider aquí */}
-          <body
-            className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-          >
+      <WebSocketProvider> 
+          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} >
             {children}
           </body>
       </WebSocketProvider>

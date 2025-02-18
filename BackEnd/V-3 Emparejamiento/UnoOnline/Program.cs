@@ -1,4 +1,3 @@
-//using Examples.WebApi.Services;
 using Memory.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
@@ -10,6 +9,7 @@ using System.Text;
 using UnoOnline.Data;
 using UnoOnline.DataMappers;
 using UnoOnline.Interfaces;
+using UnoOnline.Middleware;
 using UnoOnline.Models;
 using UnoOnline.Repositories;
 using UnoOnline.WebSockets;
@@ -20,7 +20,6 @@ namespace UnoOnline
     {
         public static void Main(string[] args)
         {
-
             var builder = WebApplication.CreateBuilder(args);
 
             // Agregar CORS
@@ -30,7 +29,7 @@ namespace UnoOnline
                 {
                     builder.AllowAnyOrigin()    // Permite cualquier origen (incluyendo todos los puertos de localhost)
                            .AllowAnyHeader()    // Permite cualquier encabezado
-                           .AllowAnyMethod();   // Permite cualquier m�todo (GET, POST, etc.)
+                           .AllowAnyMethod();   // Permite cualquier método (GET, POST, etc.)
                 });
             });
 
@@ -46,7 +45,11 @@ namespace UnoOnline
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
             builder.Services.AddSingleton<WebSocketHandler>();
             builder.Services.AddScoped<DataBaseContext>();
-            
+            builder.Services.AddScoped<middleware>();
+
+            // Añadir el servicio de SignalR
+            builder.Services.AddSignalR();
+
             // Swagger configuration
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -73,7 +76,7 @@ namespace UnoOnline
                 string key = Environment.GetEnvironmentVariable("JWT_KEY");
                 if (string.IsNullOrEmpty(key))
                 {
-                    throw new Exception("JWT_KEY variable de entorno no est� configurada.");
+                    throw new Exception("JWT_KEY variable de entorno no está configurada.");
                 }
 
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -94,21 +97,26 @@ namespace UnoOnline
                 dbcontext.Database.EnsureCreated();
             }
 
-            // Habilitar Swagger y CORS para desarrollo o producci�n
+            // Habilitar Swagger y CORS para desarrollo o producción
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseCors("AllowAllOrigins"); // Aplica la pol�tica de CORS
-
             app.UseWebSockets();
+            app.UseMiddleware<middleware>();
             app.UseHttpsRedirection();
+            app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
+            app.UseCors("AllowAllOrigins"); // Aplica la política de CORS
             app.MapControllers();
+
+            // Mapear el hub de SignalR
+            app.MapHub<GameHub>("/gameHub");
+
             app.Run();
         }
     }
