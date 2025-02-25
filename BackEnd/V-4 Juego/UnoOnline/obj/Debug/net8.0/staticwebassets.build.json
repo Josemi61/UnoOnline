@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "/ZInvzWV1qI6m0WUfUmQQC7OnK3Ei8lURDYNAsG3POs=",
+  "Hash": "ofEuow1+wkYVe8Tj6M4SCPl318vAt5D1p1lOr1H2GG0=",
   "Source": "UnoOnline",
   "BasePath": "_content/UnoOnline",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "UnoOnline\\wwwroot",
       "Source": "UnoOnline",
-      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\",
       "BasePath": "_content/UnoOnline",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default1.png",
       "SourceId": "UnoOnline",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\",
       "BasePath": "_content/UnoOnline",
       "RelativePath": "images/Default1#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -38,10 +38,10 @@
       "OriginalItemSpec": "wwwroot\\images\\Default1.png"
     },
     {
-      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default2.png",
       "SourceId": "UnoOnline",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\",
       "BasePath": "_content/UnoOnline",
       "RelativePath": "images/Default2#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -59,10 +59,10 @@
       "OriginalItemSpec": "wwwroot\\images\\Default2.png"
     },
     {
-      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default3.png",
       "SourceId": "UnoOnline",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\",
       "BasePath": "_content/UnoOnline",
       "RelativePath": "images/Default3#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -80,10 +80,10 @@
       "OriginalItemSpec": "wwwroot\\images\\Default3.png"
     },
     {
-      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default4.png",
       "SourceId": "UnoOnline",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\",
       "BasePath": "_content/UnoOnline",
       "RelativePath": "images/Default4#[.{fingerprint}]?.png",
       "AssetKind": "All",
@@ -104,7 +104,7 @@
   "Endpoints": [
     {
       "Route": "images/Default1.5cuhas3ev8.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default1.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -149,7 +149,7 @@
     },
     {
       "Route": "images/Default1.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default1.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -186,7 +186,7 @@
     },
     {
       "Route": "images/Default2.c0mlfk6kr1.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default2.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -231,7 +231,7 @@
     },
     {
       "Route": "images/Default2.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default2.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -268,7 +268,7 @@
     },
     {
       "Route": "images/Default3.9itqiry30x.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default3.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -313,7 +313,7 @@
     },
     {
       "Route": "images/Default3.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default3.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -350,7 +350,7 @@
     },
     {
       "Route": "images/Default4.09axiw5v2m.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default4.png",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -395,7 +395,7 @@
     },
     {
       "Route": "images/Default4.png",
-      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default4.png",
       "Selectors": [],
       "ResponseHeaders": [
         {

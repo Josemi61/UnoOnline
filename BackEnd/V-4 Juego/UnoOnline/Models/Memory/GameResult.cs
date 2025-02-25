@@ -1,7 +1,10 @@
-﻿namespace UnoOnline.Models.Memory
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace UnoOnline.Models.Memory
 {
     public class GameResult
     {
+        [Key]
         public Guid GameId { get; set; }
         public string Player1 { get; set; }
         public string Player2 { get; set; }

@@ -3,36 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\controllers\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\controllers\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\data\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\data\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\models\\memory\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\models\\memory\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\websockets\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\models\\memory\\memorygame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\models\\memory\\memorygame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\models\\memory\\gameresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\models\\memory\\gameresult.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\controllers\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\controllers\\memorygamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\models\\memory\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\models\\memory\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\models\\memory\\memorygame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\models\\memory\\memorygame.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\dto\\gameresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\dto\\gameresultdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-4 juego\\unoonline\\websockets\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\gamehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,49 +50,76 @@
       "DocumentGroups": [
         {
           "DockedWidth": 822,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "GameResultDTO.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\DTO\\GameResultDTO.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\DTO\\GameResultDTO.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\DTO\\GameResultDTO.cs",
-              "RelativeToolTip": "UnoOnline\\DTO\\GameResultDTO.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-18T10:09:33.297Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "MemoryGameController.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\MemoryGameController.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Controllers\\MemoryGameController.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\MemoryGameController.cs",
-              "RelativeToolTip": "UnoOnline\\Controllers\\MemoryGameController.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAYwDcAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-18T10:04:34.247Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "DataBaseContext.cs",
               "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Data\\DataBaseContext.cs",
               "RelativeDocumentMoniker": "UnoOnline\\Data\\DataBaseContext.cs",
               "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Data\\DataBaseContext.cs",
               "RelativeToolTip": "UnoOnline\\Data\\DataBaseContext.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABwAAAAAAAAAAAAwwDUAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-02-18T09:48:02.17Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "GameResultDTO.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\DTO\\GameResultDTO.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\DTO\\GameResultDTO.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\DTO\\GameResultDTO.cs",
+              "RelativeToolTip": "UnoOnline\\DTO\\GameResultDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T10:09:33.297Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Card.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\Card.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\Card.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\Card.cs",
+              "RelativeToolTip": "UnoOnline\\Models\\Memory\\Card.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAADgvw4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T09:43:16.284Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WebSocketHandler.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "RelativeToolTip": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "ViewState": "AgIAALIAAAAAAAAAAAAwwNMAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T15:04:55.571Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "GameResult.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\GameResult.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\GameResult.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\GameResult.cs",
+              "RelativeToolTip": "UnoOnline\\Models\\Memory\\GameResult.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T09:43:54.675Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "GameHub.cs",
               "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\WebSockets\\GameHub.cs",
               "RelativeDocumentMoniker": "UnoOnline\\WebSockets\\GameHub.cs",
@@ -96,51 +131,55 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "GameResult.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\GameResult.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\GameResult.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\GameResult.cs",
-              "RelativeToolTip": "UnoOnline\\Models\\Memory\\GameResult.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-18T09:43:54.675Z"
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "Card.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\Card.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\Card.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\Card.cs",
-              "RelativeToolTip": "UnoOnline\\Models\\Memory\\Card.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-18T09:43:16.284Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "MemoryGame.cs",
-              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\MemoryGame.cs",
-              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\MemoryGame.cs",
-              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\MemoryGame.cs",
-              "RelativeToolTip": "UnoOnline\\Models\\Memory\\MemoryGame.cs",
-              "ViewState": "AgIAAE8AAAAAAAAAAAAcwFoAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-18T09:33:25.24Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Program.cs",
               "RelativeDocumentMoniker": "UnoOnline\\Program.cs",
               "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Program.cs",
               "RelativeToolTip": "UnoOnline\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAHsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAGoAAAAAAAAAAAAwwIsAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T16:37:54.692Z"
+              "WhenOpened": "2025-02-07T16:37:54.692Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MemoryGameController.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\MemoryGameController.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Controllers\\MemoryGameController.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\MemoryGameController.cs",
+              "RelativeToolTip": "UnoOnline\\Controllers\\MemoryGameController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T10:04:34.247Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "WebSocketController.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\WebSocketController.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Controllers\\WebSocketController.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Controllers\\WebSocketController.cs",
+              "RelativeToolTip": "UnoOnline\\Controllers\\WebSocketController.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAgwBQAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T16:12:34.018Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MemoryGame.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\MemoryGame.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Models\\Memory\\MemoryGame.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\Models\\Memory\\MemoryGame.cs",
+              "RelativeToolTip": "UnoOnline\\Models\\Memory\\MemoryGame.cs",
+              "ViewState": "AgIAAFoAAAAAAAAAAAAwwHIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-18T09:33:25.24Z",
+              "EditorCaption": ""
             }
           ]
         }

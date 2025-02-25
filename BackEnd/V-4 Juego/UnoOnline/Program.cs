@@ -1,5 +1,6 @@
 using Memory.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -22,18 +23,18 @@ namespace UnoOnline
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Agregar CORS
+            // 🔒 CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins", builder =>
                 {
-                    builder.AllowAnyOrigin()    // Permite cualquier origen (incluyendo todos los puertos de localhost)
-                           .AllowAnyHeader()    // Permite cualquier encabezado
-                           .AllowAnyMethod();   // Permite cualquier método (GET, POST, etc.)
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
                 });
             });
 
-            // Add services to the container.
+            // ✅ Servicios
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<UserMapper>();
@@ -43,14 +44,27 @@ namespace UnoOnline
             builder.Services.AddScoped<IGameRoomRepository, GameRoomRepository>();
             builder.Services.AddScoped<GameRoomRepository>();
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
-            builder.Services.AddSingleton<WebSocketHandler>();
-            builder.Services.AddScoped<DataBaseContext>();
             builder.Services.AddScoped<middleware>();
 
-            // Añadir el servicio de SignalR
+            // 💾 Singleton para DataBaseContext
+            builder.Services.AddDbContext<DataBaseContext>(options =>
+            {
+                options.UseSqlite("DataSource=uno.db");
+            }, ServiceLifetime.Singleton);
+
+            // 🚀 SignalR
             builder.Services.AddSignalR();
 
-            // Swagger configuration
+            // ✅ Singleton para WebSocketHandler
+            builder.Services.AddSingleton<WebSocketHandler>(provider =>
+            {
+                var scopeFactory = provider.GetRequiredService<IServiceScopeFactory>();
+                var hubContext = provider.GetRequiredService<Microsoft.AspNetCore.SignalR.IHubContext<GameHub>>();
+                var dbContext = provider.GetRequiredService<DataBaseContext>();
+                return new WebSocketHandler(scopeFactory, hubContext, dbContext);
+            });
+
+            // 🔒 Swagger
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
@@ -66,7 +80,7 @@ namespace UnoOnline
                 options.OperationFilter<SecurityRequirementsOperationFilter>(true, JwtBearerDefaults.AuthenticationScheme);
             });
 
-            // JWT Authentication configuration
+            // 🔑 JWT Authentication
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -88,16 +102,17 @@ namespace UnoOnline
                 };
             });
 
+            // 🌱 Construcción de la aplicación
             var app = builder.Build();
 
-            // Database initialization
+            // 💾 Inicialización de la base de datos
             using (IServiceScope scope = app.Services.CreateScope())
             {
                 DataBaseContext dbcontext = scope.ServiceProvider.GetService<DataBaseContext>();
                 dbcontext.Database.EnsureCreated();
             }
 
-            // Habilitar Swagger y CORS para desarrollo o producción
+            // 🚦 Middleware
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
@@ -111,12 +126,13 @@ namespace UnoOnline
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
-            app.UseCors("AllowAllOrigins"); // Aplica la política de CORS
+            app.UseCors("AllowAllOrigins");
             app.MapControllers();
 
-            // Mapear el hub de SignalR
+            // 📡 Mapear SignalR
             app.MapHub<GameHub>("/gameHub");
 
+            // ▶️ Ejecutar
             app.Run();
         }
     }

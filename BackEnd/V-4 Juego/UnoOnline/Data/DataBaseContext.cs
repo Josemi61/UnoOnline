@@ -13,6 +13,11 @@ namespace UnoOnline.Data
         public DbSet<GameRoom> GameRooms { get; set; }
         public DbSet<GameResult> GameResults { get; set; }
         public DbSet<MemoryGame> MemoryGames { get; set; }
+        public DbSet<Card> Card { get; set; }
+
+        public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options)
+        {
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -28,7 +33,6 @@ namespace UnoOnline.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Configurar relaciones en FriendRequest
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fr => fr.Sender)
                 .WithMany()
@@ -41,10 +45,13 @@ namespace UnoOnline.Data
                 .HasForeignKey(fr => fr.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // 🔹 Nueva relación para GameResult
-            modelBuilder.Entity<GameResult>()
-                .HasKey(gr => gr.GameId); // Asegura que GameId es clave primaria
-        }
+            modelBuilder.Entity<MemoryGame>()
+                .HasMany(mg => mg.Board)
+                .WithOne(c => c.MemoryGame)
+                .HasForeignKey(c => c.MemoryGameId);
 
+            modelBuilder.Entity<Card>()
+                .ToTable("Card");
+        }
     }
 }

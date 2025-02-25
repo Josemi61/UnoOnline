@@ -9,7 +9,7 @@ using System.Linq;
 namespace UnoOnline.Controllers
 {
     [ApiController]
-    [Route("api/[Memory]")]
+    [Route("api/[controller]")]
     public class MemoryGameController : ControllerBase
     {
         private readonly DataBaseContext _dbContext;

@@ -36,6 +36,13 @@ public class WebSocketHandler
         _dbContext = dbContext;
     }
 
+    // Dentro de WebSocketHandler.cs
+    public int GetConnectedUsers()
+    {
+        return _connections.Count;
+    }
+
+
     public async Task HandleWebSocketAsync(string userId, WebSocket webSocket)
     {
         if (_connections.TryGetValue(userId, out var existingSocket))
@@ -117,6 +124,9 @@ public class WebSocketHandler
                     default:
                         Console.WriteLine($"⚠️ Tipo de mensaje desconocido: {messageType}");
                         break;
+                    case "StartGame":
+                        await HandleStartGame(requestData);
+                        break;
                 }
             }
         }
@@ -131,24 +141,77 @@ public class WebSocketHandler
     }
 
 
+    private async Task HandleStartGame(string requestData)
+    {
+        if (string.IsNullOrEmpty(requestData))
+        {
+            Console.WriteLine("⚠️ Formato inválido para StartGame: Falta roomId");
+            return;
+        }
+
+        Guid gameId = Guid.Parse(requestData);
+
+        // ✅ Usamos directamente _dbContext como Singleton
+        var game = _dbContext.GameRooms.FirstOrDefault(g => g.RoomId == gameId.ToString());
+        if (game == null)
+        {
+            Console.WriteLine("❌ Sala no encontrada");
+            return;
+        }
+
+        string player1 = game.HostId.ToString();
+        string player2 = game.GuestId.ToString();
+
+        // ✅ Añadir jugadores al grupo usando SignalR
+        await _hubContext.Groups.AddToGroupAsync(player1, game.RoomId);
+        await _hubContext.Groups.AddToGroupAsync(player2, game.RoomId);
+
+        Console.WriteLine($"👤 {player1} unido al grupo {game.RoomId}");
+        Console.WriteLine($"👤 {player2} unido al grupo {game.RoomId}");
+
+        // ✅ Enviar evento GameStarted al grupo
+        await _hubContext.Clients.Group(game.RoomId).SendAsync("GameStarted", game.RoomId, player1, player2);
+        Console.WriteLine($"🚀 Evento GameStarted enviado al grupo {game.RoomId}");
+    }
+
+
     private async Task HandleFlipCard(string requestData)
     {
-        var parts = requestData.Split(',');
-        if (parts.Length != 3)
-            return;
+        try
+        {
+            var parts = requestData.Split(',');
+            if (parts.Length != 3)
+            {
+                Console.WriteLine("⚠️ Formato inválido para FlipCard");
+                return;
+            }
 
-        Guid gameId = Guid.Parse(parts[0]);
-        int index1 = int.Parse(parts[1]);
-        int index2 = int.Parse(parts[2]);
+            Guid gameId = Guid.Parse(parts[0]);
+            int index1 = int.Parse(parts[1]);
+            int index2 = int.Parse(parts[2]);
 
-        var game = _dbContext.MemoryGames.FirstOrDefault(g => g.GameId == gameId);
-        if (game == null)
-            return;
+            var game = _dbContext.MemoryGames.Include(g => g.Board).SingleOrDefault(g => g.GameId == gameId);
+            if (game == null)
+            {
+                Console.WriteLine("❌ Juego no encontrado");
+                return;
+            }
 
-        bool success = await game.FlipCard(index1, index2, game.CurrentTurn, _hubContext);
-        if (success)
-            await _hubContext.Clients.Group(gameId.ToString()).SendAsync("FlipCardResult", index1, index2, game.CurrentTurn);
+            bool success = await game.FlipCard(index1, index2, game.CurrentTurn, _hubContext);
+            if (success)
+            {
+                await _hubContext.Clients.Group(gameId.ToString()).SendAsync("FlipCardResult", index1, index2, game.CurrentTurn);
+                await _dbContext.SaveChangesAsync();
+                Console.WriteLine($"✅ FlipCard realizado correctamente: {index1}, {index2}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error en HandleFlipCard: {ex.Message}");
+        }
     }
+
+
 
     private async Task HandleGameOver(string requestData)
     {
@@ -627,7 +690,7 @@ public class WebSocketHandler
         if (dataParts.Length != 2)
         {
             Console.WriteLine("⚠️ Formato inválido para FriendRequestResponse. Debe ser 'FriendRequestResponse|requestId,accepted'");
-            return;
+            return; 
         }
 
         int requestId = int.Parse(dataParts[0]);

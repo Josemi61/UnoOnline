@@ -76,6 +76,91 @@
         }
       }
     },
+    "/api/MemoryGame/create": {
+      "post": {
+        "tags": [
+          "MemoryGame"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateGameRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MemoryGame/flip": {
+      "post": {
+        "tags": [
+          "MemoryGame"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlipCardsRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlipCardsRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FlipCardsRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/MemoryGame/results/{gameId}": {
+      "get": {
+        "tags": [
+          "MemoryGame"
+        ],
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Search/Search/{id}": {
       "post": {
         "tags": [
@@ -310,6 +395,42 @@
   },
   "components": {
     "schemas": {
+      "CreateGameRequest": {
+        "type": "object",
+        "properties": {
+          "player1": {
+            "type": "string",
+            "nullable": true
+          },
+          "player2": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FlipCardsRequest": {
+        "type": "object",
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "index1": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "index2": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "player": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "LoginModel": {
         "type": "object",
         "properties": {

@@ -1,16 +1,26 @@
-﻿namespace UnoOnline.Models.Memory
+﻿using Microsoft.EntityFrameworkCore;
+using System;
+using UnoOnline.Models.Memory;
+
+namespace UnoOnline.Models
 {
     public class Card
     {
-        public int Value { get; private set; }
+        public int Id { get; set; } // Added Id property
+        public int Value { get; set; }
         public bool IsFlipped { get; set; }
         public bool IsMatched { get; set; }
+        public Guid MemoryGameId { get; set; } // Relación con MemoryGame
+        public MemoryGame MemoryGame { get; set; }
 
-        public Card(int value)
+        public class DataBaseContext : DbContext
         {
-            Value = value;
-            IsFlipped = false;
-            IsMatched = false;
+            public DbSet<Card> Cards { get; set; }
+
+            protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                modelBuilder.Entity<Card>().HasKey(c => c.Id); // Assuming 'Id' is the primary key property
+            }
         }
     }
 }
