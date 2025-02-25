@@ -15,7 +15,6 @@ export default function MenuPage() {
   const router = useRouter()
 
   const handleLogout = () => {
-
     router.push("/")
   }
 
@@ -23,13 +22,21 @@ export default function MenuPage() {
     router.push("/matchmaking")
   }
 
+  const handlePlayWithFriends = () => {
+    router.push("/matchmaking?mode=friends")
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-blue-800 text-white p-8">
       <div className="max-w-4xl mx-auto">
-        <UserProfile onLogout={handleLogout} user={{
-                  avatar: "",
-                  nickname: ""
-              }} />
+        <UserProfile 
+          onLogout={handleLogout} 
+          user={{
+            avatar: "",
+            nickname: ""
+          }} 
+        />
+
         <div className="mt-8 flex justify-between items-center">
           <button
             onClick={() => setShowFriendsList(!showFriendsList)}
@@ -44,27 +51,48 @@ export default function MenuPage() {
             Buscar Usuarios
           </button>
         </div>
-        {showFriendsList && <FriendsList />}
-        <GameStats stats={{
-                  connectedPlayers: 0,
-                  activeGames: 0,
-                  playersInGames: 0
-              }} />
-        <div className="mt-8 text-center">
+
+        {showFriendsList && (
+          <FriendsList 
+            onSelectFriend={() => {}} 
+            onClose={() => setShowFriendsList(false)} 
+          />
+        )}
+
+        <GameStats 
+          stats={{
+            connectedPlayers: 0,
+            activeGames: 0,
+            playersInGames: 0
+          }} 
+        />
+
+        {/* Sección de botones "Jugar" */}
+        <div className="mt-8 flex justify-center space-x-8">
           <button
             onClick={handlePlay}
             className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full text-xl"
           >
-            Jugar
+            Jugar UNO
+          </button>
+          <button
+            onClick={handlePlayWithFriends}
+            className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 px-6 rounded-full text-xl"
+          >
+            Jugar x
           </button>
         </div>
-        <button
-          onClick={() => setShowRequests(true)}
-          className="mt-4 bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-        >
-          Ver Solicitudes e Invitaciones
-        </button>
+
+        <div className="mt-8 text-center">
+          <button
+            onClick={() => setShowRequests(true)}
+            className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+          >
+            Ver Solicitudes e Invitaciones
+          </button>
+        </div>
       </div>
+
       {showUserSearch && <UserSearchModal onClose={() => setShowUserSearch(false)} />}
       {showRequests && <RequestsModal onClose={() => setShowRequests(false)} />}
     </div>

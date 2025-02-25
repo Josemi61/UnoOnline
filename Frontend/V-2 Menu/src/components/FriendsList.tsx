@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 
 interface Friend {
   id: string;
@@ -11,12 +11,17 @@ interface Friend {
   status: "connected" | "disconnected" | "playing";
 }
 
+interface FriendsListProps {
+  onClose: () => void;
+}
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7201";
 
-export default function FriendsList() {
+export default function FriendsList({ onClose }: FriendsListProps) {
   const [friends, setFriends] = useState<Friend[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -57,7 +62,6 @@ export default function FriendsList() {
   const handleRemoveFriend = async (friendId: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar a este amigo?")) {
       try {
-        // Aquí podrías hacer una petición al backend para eliminar al amigo
         setFriends(friends.filter((friend) => friend.id !== friendId));
       } catch (error) {
         console.error("Error al eliminar amigo:", error);
@@ -65,21 +69,35 @@ export default function FriendsList() {
     }
   };
 
+  const handleViewProfile = (friendId: string) => {
+    router.push(`/UserProfileModal/${friendId}`);
+  };
+
   return (
-    <div className="mt-4">
-      <input
-        type="text"
-        placeholder="Buscar amigos..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full p-2 rounded bg-white/10 text-white placeholder-gray-300 mb-4"
-      />
+    <div className="mt-4 bg-gray-800 p-4 rounded-lg">
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          placeholder="Buscar amigos..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-2 rounded bg-white/10 text-white placeholder-gray-300"
+        />
+        <button onClick={onClose} className="ml-2 text-white bg-red-500 hover:bg-red-600 px-3 py-1 rounded">
+          Cerrar
+        </button>
+      </div>
+
       {error ? (
         <p className="text-red-500 text-sm text-center">{error}</p>
       ) : (
         <ul className="space-y-4">
           {friends.map((friend) => (
-            <li key={friend.id} className="flex items-center justify-between bg-white/10 p-4 rounded-lg">
+            <li
+              key={friend.id}
+              className="flex items-center justify-between bg-white/10 p-4 rounded-lg cursor-pointer hover:bg-white/20"
+              onClick={() => handleViewProfile(friend.id)}
+            >
               <div className="flex items-center">
                 <Image
                   src={
@@ -112,14 +130,15 @@ export default function FriendsList() {
                   </p>
                 </div>
               </div>
-              <div>
-                <Link href={`/profile/${friend.id}`} className="text-blue-300 hover:text-blue-100 mr-4">
-                  Ver Perfil
-                </Link>
-                <button onClick={() => handleRemoveFriend(friend.id)} className="text-red-400 hover:text-red-200">
-                  Eliminar Amigo
-                </button>
-              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRemoveFriend(friend.id);
+                }}
+                className="text-red-400 hover:text-red-200"
+              >
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>

@@ -1,6 +1,9 @@
+"use client";
+
 // Componente MatchmakingView
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import PlayerCard from "@/components/PlayerCard";
 import ActionButtons from "@/components/ActionButtons";
 import FriendsList from "@/components/FriendsList";
@@ -21,18 +24,20 @@ export default function MatchmakingView() {
   const router = useRouter();
 
   useEffect(() => {
-    // Simular carga de datos del jugador actual
+    // Recuperar usuario desde localStorage
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsedUser = JSON.parse(storedUser);
       setCurrentPlayer({
         id: parsedUser.id,
         apodo: parsedUser.apodo,
-        avatar: `https://localhost:7201/images/${parsedUser.avatar}`,
+        avatar: parsedUser.avatar.startsWith("http")
+          ? parsedUser.avatar
+          : `https://localhost:7201/images/${parsedUser.avatar}`,
       });
     }
 
-    // Simular verificación de si el jugador fue invitado
+    // Verificar si el jugador fue invitado
     const wasInvited = new URLSearchParams(window.location.search).get("invited") === "true";
     setIsHost(!wasInvited);
   }, []);
@@ -47,7 +52,6 @@ export default function MatchmakingView() {
 
   const handlePlayRandom = () => {
     setIsSearching(true);
-    // Simular búsqueda de oponente aleatorio
     setTimeout(() => {
       setOpponent({
         id: "random",
@@ -73,7 +77,6 @@ export default function MatchmakingView() {
   };
 
   const handleStartGame = () => {
-    // Aquí iría la lógica para iniciar el juego
     router.push("/game");
   };
 
@@ -82,7 +85,7 @@ export default function MatchmakingView() {
   };
 
   if (!currentPlayer) {
-    return <div>Cargando...</div>;
+    return <div className="text-white text-center">Cargando...</div>;
   }
 
   return (
@@ -90,7 +93,20 @@ export default function MatchmakingView() {
       <h1 className="text-4xl font-bold text-white mb-8 text-center">Emparejamiento</h1>
 
       <div className="flex justify-center space-x-8 mb-8">
-        <PlayerCard player={currentPlayer} isHost={isHost} />
+        {/* Mostrar el usuario actual con su imagen de avatar */}
+        <div className="w-64 h-64 bg-white/10 p-4 rounded-lg flex flex-col items-center">
+          <Image
+            src={currentPlayer.avatar}
+            alt={`Avatar de ${currentPlayer.apodo}`}
+            width={80}
+            height={80}
+            className="rounded-full"
+            unoptimized
+          />
+          <h2 className="text-white font-bold text-lg mt-4">{currentPlayer.apodo}</h2>
+          {isHost && <p className="text-yellow-400">Anfitrión</p>}
+        </div>
+
         {opponent ? (
           <PlayerCard player={opponent} isHost={!isHost} />
         ) : (
@@ -133,5 +149,3 @@ export default function MatchmakingView() {
     </div>
   );
 }
-
-

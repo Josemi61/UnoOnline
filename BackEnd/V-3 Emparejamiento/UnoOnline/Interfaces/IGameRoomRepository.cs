@@ -9,5 +9,8 @@ namespace UnoOnline.Interfaces
         Task<GameRoom?> GetRoomByIdAsync(string roomId);
         Task<bool> AddGuestToRoomAsync(string roomId, int guestId);
         Task<bool> RemoveRoomAsync(string roomId);
+        Task<GameRoom?> GetAvailableRoomAsync();
+        Task<bool> ConvertRoomToBotGameAsync(string roomId);
+        Task<bool> EndGameAsync(string roomId);
     }
 }

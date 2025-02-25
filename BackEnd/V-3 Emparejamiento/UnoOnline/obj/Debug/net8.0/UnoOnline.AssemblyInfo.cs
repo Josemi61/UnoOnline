@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UnoOnline")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a101973286727aac7ba982051c917522d7c8c0c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ab63a8b4d3465a9be0b8209343dd9fb49d097040")]
 [assembly: System.Reflection.AssemblyProductAttribute("UnoOnline")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UnoOnline")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
