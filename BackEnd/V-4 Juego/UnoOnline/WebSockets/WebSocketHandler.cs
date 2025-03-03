@@ -135,19 +135,38 @@ public class WebSocketHandler
             if (int.TryParse(userId, out int parsedUserId))
             {
                 _connectedPlayers.TryRemove(parsedUserId, out _);
+
+                // Verificar si el usuario estaba en alguna sala
+                var roomsToRemove = _gameRooms
+                    .Where(gr => gr.Value.HostId == parsedUserId || gr.Value.GuestId == parsedUserId)
+                    .Select(gr => gr.Key)
+                    .ToList();
+
+                foreach (var roomId in roomsToRemove)
+                {
+                    // Eliminar la sala de las colecciones en memoria
+                    _activeGames.Remove(roomId, out _);
+                    _gameRooms.TryRemove(roomId, out _);
+                    Console.WriteLine($"🏆 Jugador desconectado, partida {roomId} finalizada.");
+
+                    // Eliminar la sala en el repositorio (base de datos)
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
+                        bool success = await gameRoomRepository.DeleteRoomAsync(roomId);
+                        if (success)
+                        {
+                            Console.WriteLine($"✅ Sala {roomId} eliminada del repositorio.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"❌ Error al eliminar la sala {roomId} del repositorio.");
+                        }
+                    }
+                }
             }
-
-            //_waitingPlayers = new Queue<int>(_waitingPlayers.Where(id => id != userId));
-
 
             Console.WriteLine($"❌ Usuario {userId} desconectado. Total conectados: {_connectedUsers}");
-
-            if (_gameRooms.Values.Any(gr => gr.HostId == parsedUserId || gr.GuestId == parsedUserId))
-            {
-                string roomId = _gameRooms.First(gr => gr.Value.HostId == parsedUserId || gr.Value.GuestId == parsedUserId).Key;
-                _activeGames.Remove(roomId, out _);
-                Console.WriteLine($"🏆 Jugador desconectado, partida {roomId} finalizada.");
-            }
 
             if (webSocket.State == WebSocketState.Open)
             {
@@ -170,11 +189,11 @@ public class WebSocketHandler
         {
             var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
 
-            bool success = await gameRoomRepository.EndGameAsync(roomId);
+            bool success = await gameRoomRepository.DeleteRoomAsync(roomId);
 
             if (success)
             {
-                Console.WriteLine($"✅ Partida {roomId} finalizada y marcada como inactiva.");
+                Console.WriteLine($"✅ Partida {roomId} finalizada.");
             }
             else
             {
@@ -358,6 +377,13 @@ public class WebSocketHandler
             var room = await repository.CreateRoomAsync(hostId);
 
             Console.WriteLine($"✅ Sala creada por {hostId}. ID: {room.RoomId}");
+
+            _gameRooms.TryAdd(room.RoomId, new GameRoom
+            {
+                RoomId = room.RoomId,
+                HostId = room.HostId,
+                GuestId = null,          // aún no hay invitado
+            });
 
             if (_connections.TryGetValue(hostId.ToString(), out var socket) && socket.State == WebSocketState.Open)
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UnoOnline.Data;
+using UnoOnline.DTO;
 using UnoOnline.Interfaces;
 using UnoOnline.Models;
 namespace UnoOnline.Repositories
@@ -85,5 +86,21 @@ namespace UnoOnline.Repositories
             return false;
         }
 
+        public async Task UpdateUserCompletoAsync(UserCreateDTO user)
+        {
+            var usuarioVariado = _context.Users.FirstOrDefault(p => p.Id == user.Id);
+
+            if (usuarioVariado == null)
+            {
+                throw new Exception("La variación del user no existe.");
+            }
+
+            usuarioVariado.Apodo = user.Apodo;
+            usuarioVariado.Email = user.Email;
+            usuarioVariado.Password = user.Password;
+
+            _context.Users.Update(usuarioVariado);
+            await _context.SaveChangesAsync();
+        }
     }
 }

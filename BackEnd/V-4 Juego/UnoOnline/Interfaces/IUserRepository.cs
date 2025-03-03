@@ -1,4 +1,5 @@
-﻿using UnoOnline.Models;
+﻿using UnoOnline.DTO;
+using UnoOnline.Models;
 
 namespace UnoOnline.Interfaces
 {
@@ -12,6 +13,7 @@ namespace UnoOnline.Interfaces
         Task AddUserAsync(User user);
         Task<string> StoreImageAsync(IFormFile file, string avatarName);
         Task UpdateUserAsync(User user);
+        Task UpdateUserCompletoAsync(UserCreateDTO user);
         Task<bool> AddVictoryAsync(int playerId);
 
     }

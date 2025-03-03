@@ -42,6 +42,7 @@ namespace UnoOnline
             builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+            builder.Services.AddScoped<FriendshipRepository>();
             builder.Services.AddScoped<FriendshipService>();
             builder.Services.AddScoped<IGameRoomRepository, GameRoomRepository>();
             builder.Services.AddScoped<GameRoomRepository>();
