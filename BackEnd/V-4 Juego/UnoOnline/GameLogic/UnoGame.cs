@@ -213,10 +213,29 @@ namespace UnoOnline.GameLogic
 
                 var action = JsonSerializer.Deserialize<PlayerAction>(message);
 
+                if (action.PassTurn)
+                {
+                    Console.WriteLine($"Jugador {playerId} ha decidido pasar el turno.");
+                    NextTurn();
+                    await SendGameStateToPlayers(roomId);
+                    return;
+                }
+
+
                 // 🃏 El jugador juega una carta
                 if (action.PlayedCard != null && IsValidMove(action.PlayedCard))
                 {
-                    player.Hand.Remove(action.PlayedCard);
+                    var cardToRemove = player.Hand.FirstOrDefault(c => c.Color == action.PlayedCard.Color && c.Value == action.PlayedCard.Value);
+                    if (cardToRemove != null)
+                    {
+                        player.Hand.Remove(cardToRemove);
+                    }
+                    else
+                    {
+                        Console.WriteLine("⚠️ La carta jugada no se encontró en la mano del jugador.");
+                        return;
+                    }
+
                     currentCard = action.PlayedCard;
 
                     if (forcedColor != null && action.PlayedCard.Color == forcedColor)
@@ -277,14 +296,29 @@ namespace UnoOnline.GameLogic
                         {
                             await AskPlayerForColor(players[(currentPlayerIndex + 1) % players.Count].Socket);
                         }
+                        NextTurn();
                     }
                     else
                     {
-                        player.Hand.Add(deck.Pop());
-                    }
-                    NextTurn();
-                }
+                        var drawnCard = deck.Pop();
+                        player.Hand.Add(drawnCard);
 
+                        await player.SendMessage($"DrawnCard|{drawnCard.Color}-{drawnCard.Value}");
+
+                        if (IsValidMove(drawnCard))
+                        {
+                            await player.SendMessage($"PlayableDrawnCard|{drawnCard.Color}-{drawnCard.Value}");
+                            // Se queda en el mismo turno. El jugador puede:
+                            //   - Enviar otra acción para jugarla (PlayedCard),
+                            //   - O enviar PassTurn para ceder el turno.
+                        }
+                        else
+                        {
+                            // Si no es jugable, se pasa el turno
+                            NextTurn();
+                        }
+                    }
+                }
                 // 📤 Enviar el estado actualizado a todos los jugadores
                 await SendGameStateToPlayers(roomId);
             }

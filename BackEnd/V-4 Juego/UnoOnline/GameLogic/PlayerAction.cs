@@ -4,5 +4,6 @@
     {
         public Card PlayedCard { get; set; }
         public bool DrawCard { get; set; }
+        public bool PassTurn { get; set; }
     }
 }

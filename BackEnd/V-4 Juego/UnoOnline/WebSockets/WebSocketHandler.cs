@@ -144,12 +144,44 @@ public class WebSocketHandler
 
                 foreach (var roomId in roomsToRemove)
                 {
-                    // Eliminar la sala de las colecciones en memoria
+                    // Si se encuentra la sala en _gameRooms, determinar quién es el oponente
+                    if (_gameRooms.TryGetValue(roomId, out var room))
+                    {
+                        int? opponentId = null;
+                        string disconnectMessage = string.Empty;
+
+                        if (room.HostId == parsedUserId)
+                        {
+                            // El host se desconecta: se notifica al guest
+                            opponentId = room.GuestId;
+                            disconnectMessage = $"HostDisconnected|{roomId}";
+                        }
+                        else if (room.GuestId == parsedUserId)
+                        {
+                            // El guest se desconecta: se notifica al host
+                            opponentId = room.HostId;
+                            disconnectMessage = $"GuestDisconnected|{roomId}";
+                        }
+
+                        // Enviar mensaje al oponente si existe y está conectado
+                        if (opponentId.HasValue)
+                        {
+                            if (_connections.TryGetValue(opponentId.Value.ToString(), out var opponentSocket)
+                                && opponentSocket.State == WebSocketState.Open)
+                            {
+                                var bytes = Encoding.UTF8.GetBytes(disconnectMessage);
+                                await opponentSocket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                                Console.WriteLine($"📤 Mensaje enviado a {opponentId} por desconexión de {parsedUserId}: {disconnectMessage}");
+                            }
+                        }
+                    }
+
+                    // Eliminar la sala de partidas activas y de la colección en memoria
                     _activeGames.Remove(roomId, out _);
                     _gameRooms.TryRemove(roomId, out _);
-                    Console.WriteLine($"🏆 Jugador desconectado, partida {roomId} finalizada.");
+                    Console.WriteLine($"🏆 Jugador {parsedUserId} desconectado, partida {roomId} finalizada.");
 
-                    // Eliminar la sala en el repositorio (base de datos)
+                    // Borrar la sala en la base de datos
                     using (var scope = _scopeFactory.CreateScope())
                     {
                         var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
@@ -464,6 +496,21 @@ public class WebSocketHandler
 
             Console.WriteLine($"✅ {guestId} se unió a la sala {roomId}");
 
+            if (_gameRooms.TryGetValue(roomId, out var existingRoom))
+            {
+                existingRoom.GuestId = guestId;
+            }
+            else
+            {
+                _gameRooms.TryAdd(roomId, new GameRoom
+                {
+                    RoomId = roomId,
+                    HostId = gameRoom.HostId,
+                    GuestId = guestId
+                });
+            }
+
+
             if (_connections.TryGetValue(guestId.ToString(), out var guestSocket) && guestSocket.State == WebSocketState.Open)
             {
                 string message = $"JoinedGame|{roomId}";
@@ -532,6 +579,10 @@ public class WebSocketHandler
         if (actionType.Equals("DrawCard", StringComparison.OrdinalIgnoreCase))
         {
             playerAction.DrawCard = true;
+        }
+        else if (actionType.Equals("PassTurn", StringComparison.OrdinalIgnoreCase))
+        {
+            playerAction.PassTurn = true;
         }
         else
         {
