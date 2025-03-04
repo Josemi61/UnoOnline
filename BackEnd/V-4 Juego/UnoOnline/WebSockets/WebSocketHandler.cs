@@ -7,43 +7,35 @@ using UnoOnline.Interfaces;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.SignalR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using UnoOnline.Models.Memory;
-using UnoOnline.WebSockets;
-using UnoOnline.Data;
+using UnoOnline.GameLogic;
+using System.Text.Json;
 
 namespace UnoOnline.WebSockets;
 
 public class WebSocketHandler
 {
+    private static readonly ConcurrentDictionary<string, UnoGame> _activeGames = new();
     private static readonly ConcurrentDictionary<string, WebSocket> _connections = new();
     private static readonly ConcurrentDictionary<string, GameRoom> _gameRooms = new();
     private static ConcurrentQueue<int> _waitingPlayers = new();
     private static readonly ConcurrentDictionary<int, bool> _connectedPlayers = new();
     private static int _connectedUsers = 0;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IHubContext<GameHub> _hubContext;
-    private readonly DataBaseContext _dbContext;
-    private static readonly ConcurrentDictionary<Guid, CancellationTokenSource> _turnTimers = new();
+    private readonly GameRoomRepository _gameRoomRepository;
+    private readonly UserRepository _userRepository;
 
-    public WebSocketHandler(IServiceScopeFactory scopeFactory, IHubContext<GameHub> hubContext, DataBaseContext dbContext)
+
+
+    public WebSocketHandler(IServiceScopeFactory scopeFactory, GameRoomRepository gameRoomRepository, UserRepository userRepository)
     {
         _scopeFactory = scopeFactory;
-        _hubContext = hubContext;
-        _dbContext = dbContext;
+        _gameRoomRepository = gameRoomRepository;
+        _userRepository = userRepository;
     }
 
-    // Dentro de WebSocketHandler.cs
-    public int GetConnectedUsers()
-    {
-        return _connections.Count;
-    }
+    public int GetConnectedUsers() => _connectedUsers;
 
-
-    public async Task HandleWebSocketAsync(string userId, WebSocket webSocket)
+    public async Task HandleWebSocketAsync(WebSocket webSocket, string userId)
     {
         if (_connections.TryGetValue(userId, out var existingSocket))
         {
@@ -54,6 +46,12 @@ public class WebSocketHandler
             }
             _connections.TryRemove(userId, out _);
         }
+
+        //if (_connections.ContainsKey(userId))
+        //{
+        //    Console.WriteLine($"🔄 Usuario {userId} ya está conectado.");
+        //    return;
+        //}
 
         _connections[userId] = webSocket;
         Interlocked.Increment(ref _connectedUsers);
@@ -109,23 +107,18 @@ public class WebSocketHandler
                     case "JoinRandomRoom":
                         await HandleJoinRandomRoom(requestData);
                         break;
+                    case "PlayerAction":
+                        await HandlePlayerAction(requestData, webSocket);
+                        break;
                     case "EndGame":
                         await HandleEndGame(requestData);
                         break;
-                    case "FlipCard":
-                        await HandleFlipCard(requestData);
+                    case "ColorChosen":
+                        await HandleColorChosen(requestData);
                         break;
-                    case "GameOver":
-                        await HandleGameOver(requestData);
-                        break;
-                    case "TurnChange":
-                        await HandleTurnChange(requestData);
-                        break;
+
                     default:
                         Console.WriteLine($"⚠️ Tipo de mensaje desconocido: {messageType}");
-                        break;
-                    case "StartGame":
-                        await HandleStartGame(requestData);
                         break;
                 }
             }
@@ -136,140 +129,49 @@ public class WebSocketHandler
         }
         finally
         {
-            await HandlePlayerDisconnect(userId);
-        }
-    }
+            _connections.TryRemove(userId, out _);
+            Interlocked.Decrement(ref _connectedUsers);
 
-
-    private async Task HandleStartGame(string requestData)
-    {
-        if (string.IsNullOrEmpty(requestData))
-        {
-            Console.WriteLine("⚠️ Formato inválido para StartGame: Falta roomId");
-            return;
-        }
-
-        Guid gameId = Guid.Parse(requestData);
-
-        // ✅ Usamos directamente _dbContext como Singleton
-        var game = _dbContext.GameRooms.FirstOrDefault(g => g.RoomId == gameId.ToString());
-        if (game == null)
-        {
-            Console.WriteLine("❌ Sala no encontrada");
-            return;
-        }
-
-        string player1 = game.HostId.ToString();
-        string player2 = game.GuestId.ToString();
-
-        // ✅ Añadir jugadores al grupo usando SignalR
-        await _hubContext.Groups.AddToGroupAsync(player1, game.RoomId);
-        await _hubContext.Groups.AddToGroupAsync(player2, game.RoomId);
-
-        Console.WriteLine($"👤 {player1} unido al grupo {game.RoomId}");
-        Console.WriteLine($"👤 {player2} unido al grupo {game.RoomId}");
-
-        // ✅ Enviar evento GameStarted al grupo
-        await _hubContext.Clients.Group(game.RoomId).SendAsync("GameStarted", game.RoomId, player1, player2);
-        Console.WriteLine($"🚀 Evento GameStarted enviado al grupo {game.RoomId}");
-    }
-
-
-    private async Task HandleFlipCard(string requestData)
-    {
-        try
-        {
-            var parts = requestData.Split(',');
-            if (parts.Length != 3)
+            if (int.TryParse(userId, out int parsedUserId))
             {
-                Console.WriteLine("⚠️ Formato inválido para FlipCard");
-                return;
+                _connectedPlayers.TryRemove(parsedUserId, out _);
+
+                // Verificar si el usuario estaba en alguna sala
+                var roomsToRemove = _gameRooms
+                    .Where(gr => gr.Value.HostId == parsedUserId || gr.Value.GuestId == parsedUserId)
+                    .Select(gr => gr.Key)
+                    .ToList();
+
+                foreach (var roomId in roomsToRemove)
+                {
+                    // Eliminar la sala de las colecciones en memoria
+                    _activeGames.Remove(roomId, out _);
+                    _gameRooms.TryRemove(roomId, out _);
+                    Console.WriteLine($"🏆 Jugador desconectado, partida {roomId} finalizada.");
+
+                    // Eliminar la sala en el repositorio (base de datos)
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
+                        bool success = await gameRoomRepository.DeleteRoomAsync(roomId);
+                        if (success)
+                        {
+                            Console.WriteLine($"✅ Sala {roomId} eliminada del repositorio.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"❌ Error al eliminar la sala {roomId} del repositorio.");
+                        }
+                    }
+                }
             }
 
-            Guid gameId = Guid.Parse(parts[0]);
-            int index1 = int.Parse(parts[1]);
-            int index2 = int.Parse(parts[2]);
+            Console.WriteLine($"❌ Usuario {userId} desconectado. Total conectados: {_connectedUsers}");
 
-            var game = _dbContext.MemoryGames.Include(g => g.Board).SingleOrDefault(g => g.GameId == gameId);
-            if (game == null)
+            if (webSocket.State == WebSocketState.Open)
             {
-                Console.WriteLine("❌ Juego no encontrado");
-                return;
+                await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Conexión cerrada por el servidor", CancellationToken.None);
             }
-
-            bool success = await game.FlipCard(index1, index2, game.CurrentTurn, _hubContext);
-            if (success)
-            {
-                await _hubContext.Clients.Group(gameId.ToString()).SendAsync("FlipCardResult", index1, index2, game.CurrentTurn);
-                await _dbContext.SaveChangesAsync();
-                Console.WriteLine($"✅ FlipCard realizado correctamente: {index1}, {index2}");
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"❌ Error en HandleFlipCard: {ex.Message}");
-        }
-    }
-
-
-
-    private async Task HandleGameOver(string requestData)
-    {
-        Guid gameId = Guid.Parse(requestData);
-        var game = _dbContext.MemoryGames.FirstOrDefault(g => g.GameId == gameId);
-
-        if (game == null)
-            return;
-
-        // Notificar a los jugadores que la partida ha terminado
-        await _hubContext.Clients.Group(gameId.ToString()).SendAsync("La partida ha finalizado", game.Scores);
-
-        // ❌ Eliminar la partida de la base de datos
-        _dbContext.MemoryGames.Remove(game);
-        await _dbContext.SaveChangesAsync();
-
-        Console.WriteLine($"✅ Partida {gameId} eliminada de la base de datos.");
-    }
-
-    private async Task HandleTurnChange(string requestData)
-    {
-        Guid gameId = Guid.Parse(requestData);
-        var game = _dbContext.MemoryGames.FirstOrDefault(g => g.GameId == gameId);
-        if (game == null)
-            return;
-
-        if (_turnTimers.TryRemove(gameId, out var oldTimer))
-        {
-            oldTimer.Cancel();
-        }
-
-        var turnTimer = new CancellationTokenSource();
-        _turnTimers[gameId] = turnTimer;
-
-        _ = Task.Run(async () =>
-        {
-            try
-            {
-                await Task.Delay(TimeSpan.FromMinutes(1), turnTimer.Token);
-                await DeclareTimeoutLoss(game);
-            }
-            catch (TaskCanceledException) { }
-        });
-    }
-
-    private async Task DeclareTimeoutLoss(MemoryGame game)
-    {
-        if (!game.IsGameOver)
-        {
-            string loser = game.CurrentTurn;
-            string winner = game.Player1 == loser ? game.Player2 : game.Player1;
-
-            game.GetType().GetProperty("IsGameOver").SetValue(game, true);
-            game.Scores[winner] += 1;
-            await _hubContext.Clients.Group(game.GameId.ToString()).SendAsync("GameOver", game.Scores);
-            _dbContext.MemoryGames.Remove(game);
-            await _dbContext.SaveChangesAsync();
-            Console.WriteLine($"⏳ Jugador {loser} ha perdido por tiempo. {winner} gana la partida.");
         }
     }
 
@@ -287,11 +189,11 @@ public class WebSocketHandler
         {
             var gameRoomRepository = scope.ServiceProvider.GetRequiredService<IGameRoomRepository>();
 
-            bool success = await gameRoomRepository.EndGameAsync(roomId);
+            bool success = await gameRoomRepository.DeleteRoomAsync(roomId);
 
             if (success)
             {
-                Console.WriteLine($"✅ Partida {roomId} finalizada y marcada como inactiva.");
+                Console.WriteLine($"✅ Partida {roomId} finalizada.");
             }
             else
             {
@@ -476,6 +378,13 @@ public class WebSocketHandler
 
             Console.WriteLine($"✅ Sala creada por {hostId}. ID: {room.RoomId}");
 
+            _gameRooms.TryAdd(room.RoomId, new GameRoom
+            {
+                RoomId = room.RoomId,
+                HostId = room.HostId,
+                GuestId = null,          
+            });
+
             if (_connections.TryGetValue(hostId.ToString(), out var socket) && socket.State == WebSocketState.Open)
             {
                 string message = $"RoomCreated|{room.RoomId}";
@@ -530,6 +439,21 @@ public class WebSocketHandler
         using (var scope = _scopeFactory.CreateScope())
         {
             var repository = scope.ServiceProvider.GetRequiredService<GameRoomRepository>();
+            var userRepository = scope.ServiceProvider.GetRequiredService<UserRepository>();
+            //Nuevo
+            var gameRoom = await repository.GetRoomByIdAsync(roomId);
+            if (gameRoom == null)
+            {
+                Console.WriteLine($"❌ No se encontró la sala {roomId}");
+                return;
+            }
+
+            // Si la sala ya tiene un invitado, no se puede unir otro
+            if (gameRoom.GuestId.HasValue)
+            {
+                Console.WriteLine($"❌ La sala {roomId} ya está llena.");
+                return;
+            }
             bool success = await repository.AddGuestToRoomAsync(roomId, guestId);
 
             if (!success)
@@ -545,7 +469,85 @@ public class WebSocketHandler
                 string message = $"JoinedGame|{roomId}";
                 await guestSocket.SendAsync(Encoding.UTF8.GetBytes(message), WebSocketMessageType.Text, true, CancellationToken.None);
             }
+
+
+            // Iniciar el juego si ya hay dos jugadores (Host y Guest)
+            if (gameRoom.HostId > 0 && gameRoom.GuestId.HasValue)
+            {
+                var playerSockets = new List<WebSocket>
+            {
+                _connections[gameRoom.HostId.ToString()],
+                _connections[gameRoom.GuestId.Value.ToString()]
+            };
+                var unoGame = new UnoGame(repository, userRepository, this);
+                unoGame.StartGame(playerSockets);
+
+                _activeGames[roomId] = unoGame;
+
+                //_activeGames[roomId] = new UnoGame(repository, userRepository, this);
+                Console.WriteLine($"🎮 Juego iniciado en la sala {roomId}");
+
+                // Avisar a los jugadores que la partida ha comenzado
+                foreach (var playerSocket in playerSockets)
+                {
+                    if (playerSocket.State == WebSocketState.Open)
+                    {
+                        string startMessage = $"GameStarted|{roomId},{gameRoom.HostId},{gameRoom.GuestId}";
+                        await playerSocket.SendAsync(Encoding.UTF8.GetBytes(startMessage), WebSocketMessageType.Text, true, CancellationToken.None);
+                    }
+                }
+            }
         }
+    }
+
+    private async Task HandlePlayerAction(string requestData, WebSocket socket)
+    {
+        var parts = requestData.Split(',');
+        if (parts.Length < 3)
+        {
+            Console.WriteLine("⚠️ Formato inválido para PlayerAction. Debe ser 'PlayerAction|roomId,playerId,cardPlayed' o 'PlayerAction|roomId,playerId,DrawCard'");
+            return;
+        }
+
+        string roomId = parts[0];
+        if (!int.TryParse(parts[1], out int playerId))
+        {
+            Console.WriteLine("⚠️ ID de usuario inválido.");
+            return;
+        }
+
+        string actionType = parts[2];
+
+        if (!_activeGames.ContainsKey(roomId))
+        {
+            Console.WriteLine($"❌ No se encontró la partida para la sala {roomId}");
+            return;
+        }
+
+        var game = _activeGames[roomId];
+
+        var playerAction = new PlayerAction();
+
+        // 🃏 El jugador roba una carta
+        if (actionType.Equals("DrawCard", StringComparison.OrdinalIgnoreCase))
+        {
+            playerAction.DrawCard = true;
+        }
+        else
+        {
+            // 🃏 El jugador juega una carta
+            var cardParts = actionType.Split('-');
+            if (cardParts.Length != 2)
+            {
+                Console.WriteLine("⚠️ Formato inválido para la carta. Debe ser 'Color-Valor'");
+                return;
+            }
+
+            playerAction.PlayedCard = new Card(cardParts[0], cardParts[1]);
+            playerAction.DrawCard = false;
+        }
+
+        await game.HandlePlayerAction(socket, JsonSerializer.Serialize(playerAction), roomId, playerId);
     }
 
 
@@ -602,24 +604,7 @@ public class WebSocketHandler
     }
 
 
-    private async Task HandlePlayerDisconnect(string userId)
-    {
-        _connections.TryRemove(userId, out _);
-        Interlocked.Decrement(ref _connectedUsers);
-        Console.WriteLine($"❌ Usuario {userId} desconectado. Total conectados: {_connectedUsers}");
 
-        var game = _dbContext.MemoryGames.FirstOrDefault(g => g.Player1 == userId || g.Player2 == userId);
-        if (game != null && !game.IsGameOver)
-        {
-            string winner = game.Player1 == userId ? game.Player2 : game.Player1;
-            game.GetType().GetProperty("IsGameOver").SetValue(game, true);
-            game.Scores[winner] += 1;
-            await _hubContext.Clients.Group(game.GameId.ToString()).SendAsync("GameOver", game.Scores);
-            _dbContext.MemoryGames.Remove(game);
-            await _dbContext.SaveChangesAsync();
-            Console.WriteLine($"🏆 Jugador {winner} ha ganado por desconexión de {userId}");
-        }
-    }
 
     private async Task BroadcastStatus(int userId, int newStatus)
     {
@@ -690,7 +675,7 @@ public class WebSocketHandler
         if (dataParts.Length != 2)
         {
             Console.WriteLine("⚠️ Formato inválido para FriendRequestResponse. Debe ser 'FriendRequestResponse|requestId,accepted'");
-            return; 
+            return;
         }
 
         int requestId = int.Parse(dataParts[0]);
@@ -712,5 +697,47 @@ public class WebSocketHandler
 
             Console.WriteLine($"✅ Solicitud {requestId} {(accepted ? "ACEPTADA" : "RECHAZADA")}");
         }
+    }
+
+    private async Task HandleColorChosen(string requestData)
+    {
+        var parts = requestData.Split(',');
+        if (parts.Length != 2)
+        {
+            Console.WriteLine("⚠️ Formato inválido para ColorChosen. Debe ser 'ColorChosen|roomId,color'");
+            return;
+        }
+
+        string roomId = parts[0];
+        string chosenColor = parts[1];
+
+        if (!_activeGames.ContainsKey(roomId))
+        {
+            Console.WriteLine($"❌ No se encontró la partida para la sala {roomId}");
+            return;
+        }
+
+        var game = _activeGames[roomId];
+        game.SetForcedColor(chosenColor); // ✅ Se actualiza el color en UnoGame
+
+        Console.WriteLine($"🎨 Color cambiado a {chosenColor} en la sala {roomId}");
+    }
+
+
+
+
+    public async Task BroadcastToPlayers(List<Player> players, string message)
+    {
+        var bytes = Encoding.UTF8.GetBytes(message);
+
+        foreach (var player in players)
+        {
+            if (player.Socket.State == WebSocketState.Open)
+            {
+                await player.Socket.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+            }
+        }
+
+        Console.WriteLine($"📤 Mensaje enviado a todos los jugadores: {message}");
     }
 }

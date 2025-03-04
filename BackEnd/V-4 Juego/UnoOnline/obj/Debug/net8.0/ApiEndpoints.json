@@ -42,54 +42,6 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "UnoOnline.Controllers.MemoryGameController",
-    "Method": "CreateGame",
-    "RelativePath": "api/MemoryGame/create",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "UnoOnline.Controllers.CreateGameRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "UnoOnline.Controllers.MemoryGameController",
-    "Method": "FlipCards",
-    "RelativePath": "api/MemoryGame/flip",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "UnoOnline.Controllers.FlipCardsRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "UnoOnline.Controllers.MemoryGameController",
-    "Method": "GetGameResult",
-    "RelativePath": "api/MemoryGame/results/{gameId}",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "gameId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
     "ContainingType": "UnoOnline.Controllers.SearchController",
     "Method": "SearchAsync",
     "RelativePath": "api/Search/Search/{id}",
@@ -183,6 +135,42 @@
     "Method": "AddUserAsync",
     "RelativePath": "api/User/register",
     "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int64",
+        "IsRequired": false
+      },
+      {
+        "Name": "Avatar",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Apodo",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "UnoOnline.Controllers.UserController",
+    "Method": "UpdateUserAsync",
+    "RelativePath": "api/User/UpdateUser",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [

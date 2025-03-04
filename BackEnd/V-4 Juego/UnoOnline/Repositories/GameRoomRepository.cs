@@ -92,6 +92,18 @@ namespace UnoOnline.Repositories
             await _context.SaveChangesAsync();
             return true;
         }
+
+        public async Task<bool> DeleteRoomAsync(string roomId)
+        {
+            var room = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId);
+            if (room != null)
+            {
+                _context.GameRooms.Remove(room);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UnoOnline.Data;
+using UnoOnline.DTO;
 using UnoOnline.Interfaces;
 using UnoOnline.Models;
 namespace UnoOnline.Repositories
@@ -73,6 +74,33 @@ namespace UnoOnline.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> AddVictoryAsync(int playerId)
+        {
+            var player = await _context.Users.FirstOrDefaultAsync(p => p.Id == playerId);
+            if (player != null)
+            {
+                player.victoriasUno++;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
 
+        public async Task UpdateUserCompletoAsync(UserCreateDTO user)
+        {
+            var usuarioVariado = _context.Users.FirstOrDefault(p => p.Id == user.Id);
+
+            if (usuarioVariado == null)
+            {
+                throw new Exception("La variación del user no existe.");
+            }
+
+            usuarioVariado.Apodo = user.Apodo;
+            usuarioVariado.Email = user.Email;
+            usuarioVariado.Password = user.Password;
+
+            _context.Users.Update(usuarioVariado);
+            await _context.SaveChangesAsync();
+        }
     }
 }

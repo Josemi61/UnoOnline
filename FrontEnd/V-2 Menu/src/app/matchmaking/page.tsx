@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
@@ -12,7 +12,6 @@ interface Player {
   avatar: string;
 }
 
-const WS_URL = "wss://localhost:7201/api/websocket/connect";
 
 export default function MatchmakingView() {
   const [isHost, setIsHost] = useState(true);
@@ -20,9 +19,7 @@ export default function MatchmakingView() {
   const [showFriendsList, setShowFriendsList] = useState(false);
   const socketRef = useRef<WebSocket | null>(null);
   const router = useRouter();
-  const {roomId, setRoomId, socket, opponent, isSearching, invitation, setOpponent, setIsSearching, setInvitation} = useWebSocket();
-
-  
+  const { roomId, setRoomId, socket, opponent, isSearching, invitation, setOpponent, setIsSearching, setInvitation, messages } = useWebSocket();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -36,7 +33,17 @@ export default function MatchmakingView() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("🛠 Estado actual de messages:", messages);
+    console.log("🛠 Estado actual de roomId:", roomId);
 
+    if (messages.GameStarted && roomId) {
+      console.log("✅ GameStarted detectado, redirigiendo a /UNO...");
+      router.push("/UNO");
+    } else {
+      console.warn("⚠️ No se cumplen las condiciones para redirigir.");
+    }
+  }, [messages, roomId, router]);
 
   const handleCreateRoom = () => {
     if (!currentPlayer) return;
@@ -56,7 +63,6 @@ export default function MatchmakingView() {
     sendMessage(`PlayAgainstBot|${roomId}`);
     setOpponent({ id: "bot", apodo: "Bot UNO", avatar: "/images/bot-avatar.png" });
   };
-
 
   const handleInviteFriend = () => {
     setShowFriendsList(true);
@@ -87,13 +93,10 @@ export default function MatchmakingView() {
   };
 
   const sendMessage = (message: string) => {
-   
     if (socket) {
       socket.send(message);
     }
   };
-
-  console.log(roomId);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-blue-800 p-8">
@@ -158,11 +161,14 @@ export default function MatchmakingView() {
         </div>
       )}
 
+      {messages.GameStarted && (
+        <p className="text-xl text-center text-white mt-8">🎮 Partida iniciada, redirigiendo...</p>
+      )}
+
       <div className="text-center mt-8">
         <button onClick={handleLeave} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
           Abandonar
         </button>
       </div>
     </div>
-  );
-}
+  )};

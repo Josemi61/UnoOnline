@@ -29,7 +29,9 @@ export default function MenuPage() {
       <div className="max-w-4xl mx-auto">
         <UserProfile onLogout={handleLogout} user={{
                   avatar: "",
-                  nickname: ""
+                  apodo: "",
+                  email: "",
+                  id: ""
               }} />
         <div className="mt-8 flex justify-between items-center">
           <button

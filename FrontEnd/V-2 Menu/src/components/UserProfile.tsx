@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useWebSocket } from "@/context/WebSocketContext";
 
 export interface UserProfileProps {
+  
   user: {
     avatar: string;
     apodo: string;
@@ -18,7 +19,7 @@ export interface UserProfileProps {
 
 export default function UserProfile({ onLogout }: { onLogout: () => void }) {
   const [user, setUser] = useState<UserProfileProps["user"] | null>(null);
-  const [showEditForm, setShowEditForm] = useState(false); // Estado para controlar el modal
+  const [showEditForm, setShowEditForm] = useState(false); 
   const router = useRouter();
   const {messages} = useWebSocket();
 
@@ -146,15 +147,17 @@ function EditProfileForm({
   updateUser,
 }: {
   onClose: () => void;
-  user: { avatar: string; apodo: string; email: string };
+  user: { avatar: string; apodo: string; email: string, id: string };
   updateUser: (user: any) => void;
 }) {
   const [avatar, setAvatar] = useState<File | null>(null);
   const [apodo, setApodo] = useState(user.apodo);
   const [email, setEmail] = useState(user.email);
+  const [id] = useState(user.id);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -163,14 +166,16 @@ function EditProfileForm({
 
     try {
       const formData = new FormData();
-      formData.append("Apodo", apodo);
-      formData.append("Email", email);
-      formData.append("Password", password);
+      formData.append("Id", id);
       if (avatar) {
         formData.append("Avatar", avatar);
       }
+      formData.append("Apodo", apodo);
+      formData.append("Email", email);
+      formData.append("Password", password);
+      
 
-      const response = await fetch("https://localhost:7201/api/User/update", {
+      const response = await fetch("https://localhost:7201/api/User/UpdateUser", {
         method: "PUT",
         body: formData,
       });
@@ -248,9 +253,8 @@ function EditProfileForm({
           <input
             type="text"
             id="apodo"
-            value={apodo}
             onChange={(e) => setApodo(e.target.value)}
-            required
+            
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring focus:ring-blue-600 focus:ring-opacity-50 text-gray-900"
           />
         </div>
@@ -261,9 +265,8 @@ function EditProfileForm({
           <input
             type="email"
             id="email"
-            value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring focus:ring-blue-600 focus:ring-opacity-50 text-gray-900"
           />
         </div>
@@ -274,9 +277,8 @@ function EditProfileForm({
           <input
             type="password"
             id="password"
-            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-600 focus:ring focus:ring-blue-600 focus:ring-opacity-50 text-gray-900"
           />
         </div>

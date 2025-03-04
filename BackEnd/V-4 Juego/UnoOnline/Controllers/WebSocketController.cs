@@ -25,7 +25,6 @@ namespace UnoOnline.Controllers
             return Ok(new { connectedUsers });
         }
 
-
         [HttpGet("connect")]
         public async Task ConnectAsync()
         {
@@ -43,7 +42,8 @@ namespace UnoOnline.Controllers
                 // Aceptamos la solicitud
                 WebSocket webSocket = await HttpContext.WebSockets.AcceptWebSocketAsync();
                 Console.WriteLine($"✅ Usuario {userId} intentando conectar...");
-                await _webSocketHandler.HandleWebSocketAsync(userId, webSocket);
+                // Manejamos la solicitud.
+                await _webSocketHandler.HandleWebSocketAsync(webSocket, userId); // Cambiado a HandleWebSocketAsync
             }
             // En caso contrario la rechazamos
             else

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using UnoOnline.Data;
 using UnoOnline.DataMappers;
 using UnoOnline.DTO;
 using UnoOnline.Interfaces;
@@ -12,11 +14,13 @@ namespace UnoOnline.Controllers
     {
         private readonly IUserRepository _userRepository;
         private readonly UserMapper _mapper;
+        private readonly DataBaseContext _context;
 
-        public UserController(IUserRepository userRepository, UserMapper userMapper)
+        public UserController(IUserRepository userRepository, UserMapper userMapper, DataBaseContext context)
         {
             _userRepository = userRepository;
             _mapper = userMapper;
+            _context = context;
         }
 
         [HttpGet]
@@ -169,5 +173,82 @@ namespace UnoOnline.Controllers
 
             return Ok("Estado actualizado correctamente");
         }
+
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUserAsync([FromForm] UserCreateDTO user)
+        {
+            if (user == null)
+            {
+                return BadRequest("Información necesaria no enviada.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            // 1. Obtener el usuario existente por su Id
+            var userToUpdate = await _userRepository.GetUserByIdAsync(user.Id);
+            if (userToUpdate == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            // 2. Actualizar Email solo si se provee uno nuevo y no vacío
+            if (!string.IsNullOrWhiteSpace(user.Email) && user.Email != userToUpdate.Email)
+            {
+                var existingEmailUser = await _userRepository.GetUserByEmailAsync(user.Email);
+                if (existingEmailUser != null && existingEmailUser.Id != userToUpdate.Id)
+                {
+                    return Conflict("Email existente, por favor introduzca otro Email.");
+                }
+                userToUpdate.Email = user.Email;
+            }
+
+            // 3. Actualizar Apodo solo si se provee uno nuevo y no vacío
+            if (!string.IsNullOrWhiteSpace(user.Apodo) && user.Apodo != userToUpdate.Apodo)
+            {
+                var existingApodoUser = await _userRepository.GetUserByApodoAsync(user.Apodo);
+                if (existingApodoUser != null && existingApodoUser.Id != userToUpdate.Id)
+                {
+                    return Conflict("Apodo existente, por favor introduzca otro Apodo.");
+                }
+                userToUpdate.Apodo = user.Apodo;
+            }
+
+            // 4. Actualizar la contraseña solo si se provee una nueva (no vacía)
+            if (!string.IsNullOrWhiteSpace(user.Password))
+            {
+                var passwordHasher = new PasswordHasher();
+                userToUpdate.Password = passwordHasher.Hash(user.Password);
+            }
+
+            // 5. Actualizar el avatar solo si se provee una nueva imagen (no vacía)
+            if (user.Avatar != null)
+            {
+                try
+                {
+                    userToUpdate.Avatar = await _userRepository.StoreImageAsync(user.Avatar,
+                                                                               !string.IsNullOrWhiteSpace(user.Apodo) ? user.Apodo : userToUpdate.Apodo);
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, "Error al guardar la imagen: " + ex.Message);
+                }
+            }
+
+            try
+            {
+                _context.Users.Update(userToUpdate);
+                await _context.SaveChangesAsync();
+                return Ok(new { message = "Usuario actualizado con éxito." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+
     }
 }

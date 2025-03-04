@@ -13,6 +13,7 @@ interface WebSocketContextType {
   setInvitation: React.Dispatch<React.SetStateAction<{ roomId: string; senderId: string } | null>>;
   roomId: string | null;
   setRoomId: React.Dispatch<React.SetStateAction<string | null>>;
+  sendMessage: (message: any) => void;
 }
 
 interface Player {
@@ -22,7 +23,6 @@ interface Player {
 }
 
 export const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
-
 
 interface WebSocketProviderProps {
   children: React.ReactNode;
@@ -35,6 +35,14 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
   const [isSearching, setIsSearching] = useState(false);
   const [invitation, setInvitation] = useState<{ roomId: string; senderId: string } | null>(null);
   const [roomId, setRoomId] = useState<string | null>(null);
+
+  const sendMessage = (message: any) => {
+    if (socket && socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify(message));
+    } else {
+      console.warn("⚠️ No se puede enviar el mensaje, WebSocket no está conectado.");
+    }
+  };
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -66,90 +74,137 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
         console.log("✅ WebSocket conectado.");
         setSocket(ws);
       };
-  
+
       ws.onerror = (error) => {
         console.error("❌ Error en WebSocket:", error);
       };
-  
+
       ws.onclose = (event) => {
         console.warn("⚠️ WebSocket cerrado:", event.reason);
       };
-  
+
       ws.onmessage = (event: MessageEvent) => {
         try {
-          console.log("📩 Mensaje recibido:", event.data);
+          console.log("📩 Mensaje recibido del WebSocket:", event.data);
+          let parsedMessage: any;
       
-          // Verificamos si el mensaje es JSON o texto con formato personalizado
           if (event.data.startsWith("{") || event.data.startsWith("[")) {
-            // Si el mensaje parece ser un JSON, lo parseamos
-            const newMessage = JSON.parse(event.data);
+            parsedMessage = JSON.parse(event.data);
+            console.log("📌 Mensaje JSON parseado:", parsedMessage);
+      
             setMessages((prevMessages) => ({
               ...prevMessages,
-              ...newMessage,
+              [parsedMessage.type]: parsedMessage,
             }));
           } else {
-            // Si el mensaje es un string con formato "Tipo|Datos"
-            const [type, data] = event.data.split("|");
+            const [type, ...dataParts] = event.data.split("|"); // dataParts es un array
+            parsedMessage = { type, data: dataParts };
+            console.warn("⚠️ Mensaje WebSocket en formato texto:", parsedMessage);
       
-            console.log(`📌 Mensaje WebSocket procesado: Tipo=${type}, Datos=${data}`);
-      
-            if (type === "FriendRequest") {
-              console.log("📨 Nueva solicitud de amistad:", data);
-              // Aquí podrías actualizar el estado con la nueva solicitud de amistad
-            }
-            console.log("Tipo", event.data[0]);
             switch (type) {
               case "RoomCreated":
-                console.log("creandoroom");
-                setRoomId(data);
+                setRoomId(dataParts[0]);
                 break;
-              case "GameStarted":
-                setRoomId(data);
-                setOpponent({
-                  id: data[3],
-                  apodo: `Jugador ${data}`,
-                  avatar: "/images/random-avatar.png",
-                });
-                break;
+                case "GameStarted":
+                  console.log("🎮 Partida iniciada!");
+                  
+                  if (dataParts.length === 1) {
+                    const gameData = dataParts[0].split(","); // Volver a dividir por ","
+                    
+                    if (gameData.length < 3) {
+                      console.error("❌ Error: Datos insuficientes en GameStarted", gameData);
+                      return;
+                    }
+                
+                    const [roomId, player1, player2] = gameData; // Extraer los datos correctamente
+                    setRoomId(roomId);
+                    setOpponent({ id: player2, apodo: `Jugador ${player2}`, avatar: "/images/random-avatar.png" });
+                
+                    setMessages((prev) => ({
+                      ...prev,
+                      GameStarted: { roomId, player1, player2 },
+                    }));
+                    const gameOpponentId = player1 === user.id ? player2 : player1;
+    
+                    setOpponent({
+                      id: gameOpponentId,
+                      apodo: `Jugador ${gameOpponentId}`,
+                      avatar: "/images/random-avatar.png",
+                    });
+                  } else {
+                    console.error("❌ Error inesperado en GameStarted: estructura incorrecta", dataParts);
+                  }
+                  break;
+                
               case "Invitation":
-                setInvitation({ roomId: data, senderId: data });
+                if (dataParts.length < 2) {
+                  console.error("❌ Error: Datos insuficientes en Invitation", dataParts);
+                  return;
+                }
+                const [invRoomId, senderId] = dataParts;
+                setInvitation({ roomId: invRoomId, senderId });
                 break;
               case "JoinedGame":
-                setRoomId(data);
+                setRoomId(dataParts[0]);
                 break;
               case "MatchFound":
-                setRoomId(event.data);
+                setRoomId(dataParts[0]);
+                const gameData = dataParts[0].split(",");
+                const [roomId, player1, player2] = gameData;
+                const opponentId = player1 === user.id ? player2 : player1;
+    
                 setOpponent({
-                  // const [data1, data2] = data.split(","); 
-                  id: data[2],
-                  apodo: `Jugador ${data[2]}`,
-                  avatar: "/images/random-avatar.png",
+                  id: opponentId,
+                  apodo: `Jugador ${opponentId}`,
+                  avatar: "/images/random-avatar.png", // Ajustar si hay un endpoint para obtener avatar
                 });
                 setIsSearching(false);
                 break;
+              case "GameUpdate":
+                console.log("🔄 Recibido GameUpdate:", parsedMessage);
+                setMessages((prev) => ({ ...prev, gameState: parsedMessage.gameState }));
+                break;
+              case "PlayerTurn":
+                console.log("⏳ Turno del jugador:", parsedMessage.playerId);
+                setMessages((prev) => ({ ...prev, currentTurn: parsedMessage.playerId }));
+                break;
+              case "GameOver":
+                console.log("🏆 Juego terminado, ganador:", parsedMessage.winner);
+                setMessages((prev) => ({ ...prev, gameOver: parsedMessage }));
+                break;
+              case "CardPlayed":
+                setMessages((prev) => ({ ...prev, lastMove: dataParts.join(",") }));
+                break;
+              case "DrawCard":
+                setMessages((prev) => ({ ...prev, drawnCard: dataParts.join(",") }));
+                break;
+              case "ColorChosen":
+                setMessages((prev) => ({ ...prev, chosenColor: dataParts[0] }));
+                break;
+              case "EndGame":
+                setMessages((prev) => ({ ...prev, gameEnded: true }));
+                break;
+              default:
+                console.warn("⚠️ Mensaje WebSocket no reconocido:", event.data);
             }
           }
         } catch (error) {
           console.error("❌ Error al procesar mensaje WebSocket:", error);
         }
-      };    
-  
+      };
+      
+
       return () => {
         console.log("🔌 WebSocket desconectado para userId:", user.id);
         ws.close();
       };
     } catch (error) {
-      console.error("")
-      
+      console.error("❌ Error al conectar WebSocket:", error);
     }
-
-
   }, []);
 
-
-
   return (
-    <WebSocketContext.Provider value={{ socket, messages, opponent, setOpponent, isSearching, invitation, setIsSearching, setInvitation, roomId, setRoomId }}>
+    <WebSocketContext.Provider value={{ socket, messages, sendMessage, opponent, setOpponent, isSearching, invitation, setIsSearching, setInvitation, roomId, setRoomId }}>
       {children}
     </WebSocketContext.Provider>
   );
