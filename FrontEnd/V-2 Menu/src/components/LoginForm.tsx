@@ -2,46 +2,45 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../context/Authprovider"; // Importar el contexto
+import { useAuth } from "../context/Authprovider"; 
 import { jwtDecode } from "jwt-decode";
 import { User } from "../context/Authprovider";
 
 interface DecodedToken {
-  Id: number; // El ID del usuario
+  Id: number; 
   Apodo: string;
   Email: string;
   Avatar: string;
 }
 
 export default function LoginForm({ onClose }: { onClose: () => void }) {
-  const { login } = useAuth(); // Usar el hook de contexto para acceder a login
-  const [identificador, setIdentificador] = useState(""); // Admite usuario o correo
+  const { login } = useAuth(); 
+  const [identificador, setIdentificador] = useState("");
   const [password, setPassword] = useState("");
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
   
-  // Guardar WebSocket en un estado local
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(""); // Limpiar el error antes de hacer la petición
+    setError(""); 
 
     try {
-      console.log("Enviando datos:", { identificador, password }); // Depuración: Ver los datos enviados
+      console.log("Enviando datos:", { identificador, password }); 
 
       const response = await fetch("https://localhost:7201/api/Auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ identificador, password }), // Enviar identificador y contraseña
+        body: JSON.stringify({ identificador, password }), 
       });
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error Data:", errorData); // Mostrar detalles del error para depuración
+        console.error("Error Data:", errorData); 
         throw new Error(errorData.message || "Error en el inicio de sesión");
       }
 
@@ -56,12 +55,11 @@ export default function LoginForm({ onClose }: { onClose: () => void }) {
         avatar: decodedToken.Avatar,
       };
 
-      // Usar el contexto para almacenar los datos del usuario
       login(user, data.accessToken);
 
-      // alert("Inicio de sesión exitoso");
-      onClose(); // Cerrar el formulario
-      router.push("/menu"); // Redirigir a la página principal
+
+      onClose(); 
+      router.push("/menu"); 
       
 
     } catch (error) {

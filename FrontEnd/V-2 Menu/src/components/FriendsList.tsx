@@ -12,8 +12,8 @@ interface Friend {
 }
 
 interface FriendsListProps {
-  onSelectFriend: (friend: Friend) => void; // ✅ Añadimos la prop
-  onClose: () => void; // ✅ Añadimos la prop
+  onSelectFriend: (friend: Friend) => void; 
+  onClose: () => void; 
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7201";
@@ -140,7 +140,6 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
                 <button onClick={() => handleRemoveFriend(friend.id)} className="text-red-400 hover:text-red-200">
                   Eliminar Amigo
                 </button>
-                {/* Botón para seleccionar un amigo */}
                 <button onClick={() => onSelectFriend(friend)} className="ml-4 bg-blue-500 text-white px-2 py-1 rounded">
                   Invitar
                 </button>
@@ -149,8 +148,6 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
           ))}
         </ul>
       )}
-
-      {/* Botón para cerrar la lista */}
       <div className="text-center mt-4">
         <button onClick={onClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
           Cerrar

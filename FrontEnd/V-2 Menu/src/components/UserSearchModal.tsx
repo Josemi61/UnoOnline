@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { useWebSocket } from "../context/WebSocketContext"  // Importa el WebSocket del contexto
+import { useWebSocket } from "../context/WebSocketContext"
 
 interface User {
   id: string
@@ -16,9 +16,8 @@ export default function UserSearchModal({ onClose }: { onClose: () => void }) {
   const [searchTerm, setSearchTerm] = useState("")
   const [error, setError] = useState<string | null>(null)
   
-  const { socket } = useWebSocket(); // 📌 Usamos el WebSocket del contexto
+  const { socket } = useWebSocket(); 
 
-  // Obtener el ID del usuario desde localStorage
   const storedUser = localStorage.getItem("user");
   const userId = storedUser ? JSON.parse(storedUser).id : null;
 

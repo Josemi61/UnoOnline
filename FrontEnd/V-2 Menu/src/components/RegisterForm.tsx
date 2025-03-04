@@ -12,7 +12,7 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth(); // Uso del contexto para gestionar login
+  const { login } = useAuth(); 
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -20,20 +20,11 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
     setError("");
     setIsLoading(true);
 
-    // Validaciones
     if (!validateEmail(email)) {
       setError("Por favor, introduce un formato de email válido.");
       setIsLoading(false);
       return;
     }
-
-    // if (!validatePassword(password)) {
-    //   setError(
-    //     "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales."
-    //   );
-    //   setIsLoading(false);
-    //   return;
-    // }
 
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
@@ -43,7 +34,7 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
 
     try {
       const formData = new FormData();
-      formData.append("Id", "0"); // ID predeterminado en 0 como muestra Swagger
+      formData.append("Id", "0"); 
       formData.append("Apodo", nickname);
       formData.append("Email", email);
       formData.append("Password", password);
@@ -63,10 +54,8 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
 
       const data = await response.json();
 
-      // Simulación de un token desde el backend
       const token = data.token || "dummyToken";
 
-      // Guardar el usuario en el contexto
       login(
         {
           id: data.id || 0,
@@ -79,8 +68,8 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
 
       console.log("Usuario registrado:", data);
       alert("Registro exitoso");
-      onClose(); // Cerrar el formulario
-      router.push("/"); // Redirigir al menú
+      onClose(); 
+      router.push("/"); 
     } catch (err: unknown) {
       console.error("Error detallado:", err);
       if (err instanceof Error) {

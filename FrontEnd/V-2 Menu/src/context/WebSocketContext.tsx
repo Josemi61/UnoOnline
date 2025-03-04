@@ -97,7 +97,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
               [parsedMessage.type]: parsedMessage,
             }));
           } else {
-            const [type, ...dataParts] = event.data.split("|"); // dataParts es un array
+            const [type, ...dataParts] = event.data.split("|"); 
             parsedMessage = { type, data: dataParts };
             console.warn("⚠️ Mensaje WebSocket en formato texto:", parsedMessage);
       
@@ -109,14 +109,14 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
                   console.log("🎮 Partida iniciada!");
                   
                   if (dataParts.length === 1) {
-                    const gameData = dataParts[0].split(","); // Volver a dividir por ","
+                    const gameData = dataParts[0].split(","); 
                     
                     if (gameData.length < 3) {
                       console.error("❌ Error: Datos insuficientes en GameStarted", gameData);
                       return;
                     }
                 
-                    const [roomId, player1, player2] = gameData; // Extraer los datos correctamente
+                    const [roomId, player1, player2] = gameData; 
                     setRoomId(roomId);
                     setOpponent({ id: player2, apodo: `Jugador ${player2}`, avatar: "/images/random-avatar.png" });
                 
@@ -156,7 +156,7 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({ children }
                 setOpponent({
                   id: opponentId,
                   apodo: `Jugador ${opponentId}`,
-                  avatar: "/images/random-avatar.png", // Ajustar si hay un endpoint para obtener avatar
+                  avatar: "/images/random-avatar.png",
                 });
                 setIsSearching(false);
                 break;

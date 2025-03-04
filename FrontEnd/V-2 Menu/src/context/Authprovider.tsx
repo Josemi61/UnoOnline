@@ -32,22 +32,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const storedUser = localStorage.getItem("user");
       const storedToken = localStorage.getItem("authToken");
 
-      console.log("storedUser:", storedUser); // Depuración
-      console.log("storedToken:", storedToken); // Depuración
-
       if (storedUser && storedToken) {
         try {
           if (storedUser !== "undefined" && storedUser !== "null") {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
             setIsAuthenticated(true);
-            console.log("Usuario cargado desde localStorage:", parsedUser); // Depuración
           } else {
             console.warn("No hay usuario válido en localStorage");
           }
         } catch (error) {
           console.error("Error al analizar el usuario de localStorage:", error);
-          logout(); // Si hay un error, deslogueamos al usuario
+          logout(); 
         }
       } else {
         console.warn("No hay datos de usuario o token en localStorage");
@@ -56,14 +52,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (userData: User, token: string) => {
-    console.log("Guardando en localStorage:", userData, token); // Depuración
+    console.log("Guardando en localStorage:", userData, token); 
     setUser(userData);
     setIsAuthenticated(true);
 
     localStorage.setItem("authToken", token);
     localStorage.setItem("user", JSON.stringify(userData));
 
-    router.push("/"); // Redirigir a la página principal después de login
+    router.push("/"); 
   };
 
   const logout = () => {
@@ -71,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsAuthenticated(false);
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
-    router.push("/"); // Redirigir a la página de login o inicio
+    router.push("/"); 
   };
 
   const updateUserData = (updatedUser: User) => {

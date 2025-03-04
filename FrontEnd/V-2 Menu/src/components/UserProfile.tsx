@@ -22,8 +22,6 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
   const [showEditForm, setShowEditForm] = useState(false); 
   const router = useRouter();
   const {messages} = useWebSocket();
-
-  // Estado para manejar el WebSocket
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
@@ -44,12 +42,9 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
     }
   }, []);
 
-  // useEffect(() =>{
-  //   console.log("mensaje recibido", messages);
-  //  }, [messages])
   
   useEffect(() => {
-    // Recuperar datos del usuario desde localStorage
+
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
@@ -69,18 +64,12 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
   
 
   const handleLogout = () => {
-    // Borrar el localStorage
     localStorage.clear();
 
-    // Redirigir a la página de inicio
     router.push("/");
-
-    // Llamar a la función onLogout proporcionada, si es necesario
     if (onLogout) {
       onLogout();
     }
-
-    // Cerrar el WebSocket si está abierto
     if (socket) {
       socket.close();
     }
@@ -116,7 +105,6 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
         </div>
       </div>
       <div>
-        {/* Botón para abrir el formulario de edición */}
         <button
           onClick={() => setShowEditForm(true)}
           className="text-blue-300 hover:text-blue-100 mr-4"
@@ -187,7 +175,6 @@ function EditProfileForm({
 
       const data = await response.json();
 
-      // Actualiza el estado del usuario
       updateUser({
         avatar: avatar ? URL.createObjectURL(avatar) : user.avatar,
         apodo: apodo,
