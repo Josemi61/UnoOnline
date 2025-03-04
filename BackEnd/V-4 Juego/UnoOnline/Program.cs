@@ -1,4 +1,3 @@
-//using Examples.WebApi.Services;
 using Memory.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
@@ -25,18 +24,16 @@ namespace UnoOnline
 
             var builder = WebApplication.CreateBuilder(args);
 
-            // Agregar CORS
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAllOrigins", builder =>
                 {
-                    builder.AllowAnyOrigin()    // Permite cualquier origen (incluyendo todos los puertos de localhost)
-                           .AllowAnyHeader()    // Permite cualquier encabezado
-                           .AllowAnyMethod();   // Permite cualquier m�todo (GET, POST, etc.)
+                    builder.AllowAnyOrigin()
+                           .AllowAnyHeader()
+                           .AllowAnyMethod();
                 });
             });
 
-            // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<UserRepository>();
@@ -52,7 +49,6 @@ namespace UnoOnline
             builder.Services.AddScoped<DataBaseContext>();
             builder.Services.AddScoped<middleware>();
 
-            // Swagger configuration
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
             {
@@ -68,7 +64,6 @@ namespace UnoOnline
                 options.OperationFilter<SecurityRequirementsOperationFilter>(true, JwtBearerDefaults.AuthenticationScheme);
             });
 
-            // JWT Authentication configuration
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -92,14 +87,12 @@ namespace UnoOnline
 
             var app = builder.Build();
 
-            // Database initialization
             using (IServiceScope scope = app.Services.CreateScope())
             {
                 DataBaseContext dbcontext = scope.ServiceProvider.GetService<DataBaseContext>();
                 dbcontext.Database.EnsureCreated();
             }
 
-            // Habilitar Swagger y CORS para desarrollo o producci�n
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();

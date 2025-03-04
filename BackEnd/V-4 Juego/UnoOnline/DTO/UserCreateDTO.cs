@@ -12,7 +12,7 @@
 
     public class UserCreateDTO
     {
-        public long Id { get; set; }//IFormFile?
+        public long Id { get; set; }
         public  IFormFile? Avatar { get; set; }
         public string? Apodo { get; set; }
         public string? Email { get; set; }

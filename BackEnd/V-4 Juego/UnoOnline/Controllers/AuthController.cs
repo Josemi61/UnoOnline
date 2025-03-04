@@ -65,12 +65,5 @@ namespace UnoOnline.Controllers
                 return Unauthorized("Email o contraseña incorrecto");
             }
         }
-
-        //[HttpGet("secret")]
-        //public ActionResult GetSecret()
-        //{
-        //    // Si el usuario es admin, devuelve el secreto
-        //    return Ok("Esto es un secreto que no todo el mundo debería leer");
-        //}
     }
 }

@@ -61,13 +61,13 @@ namespace UnoOnline.Repositories
 
             if (room == null)
             {
-                Console.WriteLine($"❌ No se encontró una sala activa con ID {roomId}.");
+                Console.WriteLine($"No se encontró una sala activa con ID {roomId}.");
                 return false;
             }
 
             if (room.GuestId != null && room.GuestId != 0)
             {
-                Console.WriteLine($"⚠️ La sala ya tiene un invitado asignado (GuestId={room.GuestId}), no se puede convertir.");
+                Console.WriteLine($"La sala ya tiene un invitado asignado (GuestId={room.GuestId}), no se puede convertir.");
                 return false;
             }
 
@@ -77,7 +77,7 @@ namespace UnoOnline.Repositories
 
             // Confirmar que se guardó correctamente
             var updatedRoom = await _context.GameRooms.FirstOrDefaultAsync(r => r.RoomId == roomId);
-            Console.WriteLine($"🔍 Verificación post-actualización: GuestId={updatedRoom?.GuestId}");
+            Console.WriteLine($"Verificación post-actualización: GuestId={updatedRoom?.GuestId}");
 
             return updatedRoom?.GuestId == -1;
         }

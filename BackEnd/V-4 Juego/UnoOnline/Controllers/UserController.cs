@@ -26,7 +26,6 @@ namespace UnoOnline.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsersAsync()
         {
-            // Comprobación de errores de ModelState
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -34,23 +33,19 @@ namespace UnoOnline.Controllers
 
             try
             {
-                // Intentar obtener los usuarios desde el repositorio
                 var users = await _userRepository.GetUsersAsync();
 
-                // Comprobar si la lista de usuarios es nula o está vacía
                 if (users == null || !users.Any())
                 {
                     return NotFound("No users found.");
                 }
 
-                // Creación del user DTO por cada User en la base de datos
                 IEnumerable<UserDTO> usersDTO = _mapper.usersToDTO(users);
 
                 return Ok(usersDTO);
             }
             catch (Exception ex)
             {
-                // Captura cualquier error inesperado y devuelve una respuesta de error 500
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
@@ -58,7 +53,6 @@ namespace UnoOnline.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserAsync(long id)
         {
-            // Verificar si el ID es válido
             if (id <= 0)
             {
                 return BadRequest("Invalid user ID.");
@@ -66,23 +60,19 @@ namespace UnoOnline.Controllers
 
             try
             {
-                // Intentar obtener el usuario desde el repositorio
                 var user = await _userRepository.GetUserByIdAsync(id);
 
-                // Comprobar si el usuario no existe
                 if (user == null)
                 {
                     return NotFound($"User with ID {id} not found.");
                 }
 
-                // Crear UserDTO según el User encontrado
                 UserDTO userDTO = _mapper.userToDTO(user);
 
                 return Ok(userDTO);
             }
             catch (Exception ex)
             {
-                // Capturar cualquier error inesperado y devolver una respuesta de error 500
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
@@ -162,7 +152,6 @@ namespace UnoOnline.Controllers
                 return NotFound("Usuario no encontrado");
             }
 
-            // Convertir el número en un valor del enum
             if (!Enum.IsDefined(typeof(StatusUser), status))
             {
                 return BadRequest("Estado no válido. Debe ser 0 (Desconectado), 1 (Conectado) o 2 (Jugando)");
@@ -187,14 +176,12 @@ namespace UnoOnline.Controllers
                 return BadRequest(ModelState);
             }
 
-            // 1. Obtener el usuario existente por su Id
             var userToUpdate = await _userRepository.GetUserByIdAsync(user.Id);
             if (userToUpdate == null)
             {
                 return NotFound("Usuario no encontrado.");
             }
 
-            // 2. Actualizar Email solo si se provee uno nuevo y no vacío
             if (!string.IsNullOrWhiteSpace(user.Email) && user.Email != userToUpdate.Email)
             {
                 var existingEmailUser = await _userRepository.GetUserByEmailAsync(user.Email);
@@ -205,7 +192,6 @@ namespace UnoOnline.Controllers
                 userToUpdate.Email = user.Email;
             }
 
-            // 3. Actualizar Apodo solo si se provee uno nuevo y no vacío
             if (!string.IsNullOrWhiteSpace(user.Apodo) && user.Apodo != userToUpdate.Apodo)
             {
                 var existingApodoUser = await _userRepository.GetUserByApodoAsync(user.Apodo);
@@ -216,14 +202,12 @@ namespace UnoOnline.Controllers
                 userToUpdate.Apodo = user.Apodo;
             }
 
-            // 4. Actualizar la contraseña solo si se provee una nueva (no vacía)
             if (!string.IsNullOrWhiteSpace(user.Password))
             {
                 var passwordHasher = new PasswordHasher();
                 userToUpdate.Password = passwordHasher.Hash(user.Password);
             }
 
-            // 5. Actualizar el avatar solo si se provee una nueva imagen (no vacía)
             if (user.Avatar != null)
             {
                 try

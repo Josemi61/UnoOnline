@@ -43,21 +43,21 @@ namespace UnoOnline.Controllers
 
             try
             {
-                // Obtener todos los usuarios desde el repositorio
+
                 var users = await _userRepository.GetUsersExceptAsync(id);
 
-                // Verifica que hay usuarios en la base de datos
+
                 if (users == null || !users.Any())
                 {
                     return NotFound("No hay usuarios disponibles para buscar.");
                 }
 
-                // Normalizar la cadena de búsqueda para ignorar tildes y mayúsculas/minúsculas
+
                 string normalizedSearch = RemoveDiacritics(request.Apodo.ToLowerInvariant());
 
-                // Filtrar amigos cuyos apodos contengan la cadena normalizada
+
                 var matchingUsers = users
-                    .Where(u => !string.IsNullOrWhiteSpace(u.Apodo) && // Evitar errores si algún apodo es nulo
+                    .Where(u => !string.IsNullOrWhiteSpace(u.Apodo) && 
                                 RemoveDiacritics(u.Apodo.ToLowerInvariant()).Contains(normalizedSearch))
                     .Select(u => new UserDTO
                     {
@@ -104,21 +104,17 @@ namespace UnoOnline.Controllers
 
             try
             {
-                // Obtener todos los usuarios desde el repositorio
                 var users = await _friendshipRepository.GetFriends(id);
 
-                // Verifica que hay usuarios en la base de datos
                 if (users == null || !users.Any())
                 {
                     return NotFound("No hay usuarios disponibles para buscar.");
                 }
 
-                // Normalizar la cadena de búsqueda para ignorar tildes y mayúsculas/minúsculas
                 string normalizedSearch = RemoveDiacritics(request.Apodo.ToLowerInvariant());
 
-                // Filtrar amigos cuyos apodos contengan la cadena normalizada
                 var matchingUsers = users
-                    .Where(u => !string.IsNullOrWhiteSpace(u.Apodo) && // Evitar errores si algún apodo es nulo
+                    .Where(u => !string.IsNullOrWhiteSpace(u.Apodo) &&
                                 RemoveDiacritics(u.Apodo.ToLowerInvariant()).Contains(normalizedSearch))
                     .Select(u => new UserDTO
                     {

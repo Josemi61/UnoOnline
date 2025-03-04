@@ -38,24 +38,9 @@ namespace UnoOnline.GameLogic
 
         public void StartGame(List<WebSocket> playerSockets)
         {
-            sockets = playerSockets; // Se asignan los WebSockets
-            InitializeGame(); // Se inicia la partida con los sockets asignados
+            sockets = playerSockets;
+            InitializeGame();
         }
-
-        //private void InitializeGame()
-        //{
-        //    deck = GenerateDeck();
-        //    deck = ShuffleDeck(deck);
-
-        //    for (int i = 0; i < sockets.Count; i++)
-        //    {
-        //        players.Add(new Player($"Player {i + 1}", sockets[i], DrawStartingHand()));
-        //    }
-
-        //    currentCard = deck.Pop();
-        //    currentPlayerIndex = new Random().Next(players.Count);
-        //    SendGameStateToPlayers();
-        //}
 
         private void InitializeGame()
         {
@@ -67,7 +52,6 @@ namespace UnoOnline.GameLogic
                 players.Add(new Player($"Player {i + 1}", sockets[i], DrawStartingHand()));
             }
 
-            // Asegurar que la carta inicial no es especial
             do
             {
                 currentCard = deck.Pop();
@@ -130,7 +114,6 @@ namespace UnoOnline.GameLogic
             return hand;
         }
 
-        // Versión sin parámetros (para InitializeGame)
         private async Task SendGameStateToPlayers()
         {
             var options = new JsonSerializerOptions
@@ -163,7 +146,6 @@ namespace UnoOnline.GameLogic
             }
         }
 
-        // Versión con roomId (para HandlePlayerAction)
         private async Task SendGameStateToPlayers(string roomId)
         {
             var options = new JsonSerializerOptions
@@ -175,7 +157,7 @@ namespace UnoOnline.GameLogic
             {
                 var state = new
                 {
-                    roomId = roomId, // ✅ Incluimos roomId solo en esta versión
+                    roomId = roomId,
                     currentPlayer = players[currentPlayerIndex].Name,
                     topCard = currentCard,
                     yourHand = player.Hand.Select(c => new { c.Color, c.Value })
@@ -222,7 +204,6 @@ namespace UnoOnline.GameLogic
                 }
 
 
-                // 🃏 El jugador juega una carta
                 if (action.PlayedCard != null && IsValidMove(action.PlayedCard))
                 {
                     var cardToRemove = player.Hand.FirstOrDefault(c => c.Color == action.PlayedCard.Color && c.Value == action.PlayedCard.Value);
@@ -232,7 +213,7 @@ namespace UnoOnline.GameLogic
                     }
                     else
                     {
-                        Console.WriteLine("⚠️ La carta jugada no se encontró en la mano del jugador.");
+                        Console.WriteLine("La carta jugada no se encontró en la mano del jugador.");
                         return;
                     }
 
@@ -240,38 +221,35 @@ namespace UnoOnline.GameLogic
 
                     if (forcedColor != null && action.PlayedCard.Color == forcedColor)
                     {
-                        forcedColor = null; // 🔹 Se elimina la restricción cuando se juega el color correcto
+                        forcedColor = null;
                     }
 
-                    // 🏁 Verificar si el jugador ha ganado
                     if (!player.Hand.Any())
                     {
-                        Console.WriteLine($"🏆 {player.Name} ha ganado la partida!");
+                        Console.WriteLine($"{player.Name} ha ganado la partida!");
                         await _webSocketHandler.BroadcastToPlayers(players, $"Winner|{player.Name}");
                         await EndGame(roomId, playerId);
                         return;
                     }
 
-                    // ♻️ Manejar acumulación de cartas en +2 y +4
                     if (action.PlayedCard.Value == "+2")
                     {
                         drawStack += 2;
-                        lastAccumulatedCard = "+2"; // 📌 Marcar que el último acumulado fue +2
+                        lastAccumulatedCard = "+2";
                     }
                     else if (action.PlayedCard.Value == "+4")
                     {
                         drawStack += 4;
-                        lastAccumulatedCard = "+4"; // 📌 Marcar que el último acumulado fue +4
+                        lastAccumulatedCard = "+4";
                     }
                     else
                     {
-                        drawStack = 0; // 🔹 Si no es una carta de acumulación, se resetea
+                        drawStack = 0;
                         lastAccumulatedCard = "";
                     }
 
                     HandleSpecialCard(action.PlayedCard);
 
-                    // ✅ Si el último acumulado fue un +4 y el siguiente jugador no pudo continuar, el que jugó el +4 elige color
                     if (lastAccumulatedCard == "+4" && drawStack == 0)
                     {
                         await AskPlayerForColor(players[currentPlayerIndex].Socket);
@@ -279,19 +257,17 @@ namespace UnoOnline.GameLogic
 
                     NextTurn();
                 }
-                // 🃏 El jugador roba cartas acumuladas si no tiene para responder
                 else if (action.DrawCard)
                 {
-                    if (drawStack > 0) // 🔹 Si hay cartas acumuladas, se las chupa todas
+                    if (drawStack > 0)
                     {
                         for (int i = 0; i < drawStack; i++)
                         {
                             player.Hand.Add(deck.Pop());
                         }
-                        drawStack = 0; // 🔹 Se reinicia el contador después de robar
-                        lastAccumulatedCard = ""; // 🔹 Ya no hay acumulación activa
+                        drawStack = 0;
+                        lastAccumulatedCard = "";
 
-                        // ✅ Si el último acumulado fue un +4, ahora se elige el color
                         if (lastAccumulatedCard == "+4")
                         {
                             await AskPlayerForColor(players[(currentPlayerIndex + 1) % players.Count].Socket);
@@ -308,18 +284,13 @@ namespace UnoOnline.GameLogic
                         if (IsValidMove(drawnCard))
                         {
                             await player.SendMessage($"PlayableDrawnCard|{drawnCard.Color}-{drawnCard.Value}");
-                            // Se queda en el mismo turno. El jugador puede:
-                            //   - Enviar otra acción para jugarla (PlayedCard),
-                            //   - O enviar PassTurn para ceder el turno.
                         }
                         else
                         {
-                            // Si no es jugable, se pasa el turno
                             NextTurn();
                         }
                     }
                 }
-                // 📤 Enviar el estado actualizado a todos los jugadores
                 await SendGameStateToPlayers(roomId);
             }
             finally
@@ -332,14 +303,13 @@ namespace UnoOnline.GameLogic
         {
             if (newColor != "Red" && newColor != "Green" && newColor != "Blue" && newColor != "Yellow")
             {
-                Console.WriteLine("⚠️ Color inválido elegido. No se cambiará.");
+                Console.WriteLine("Color inválido elegido. No se cambiará.");
                 return;
             }
 
-            Console.WriteLine($"🎨 El siguiente jugador solo puede jugar cartas {newColor}");
-            forcedColor = newColor; // ✅ Se establece la restricción de color
+            Console.WriteLine($"El siguiente jugador solo puede jugar cartas {newColor}");
+            forcedColor = newColor;
 
-            // 📤 Enviar el estado actualizado a todos los jugadores con el nuevo color obligatorio
             await SendGameStateToPlayers(roomId);
         }
 
@@ -350,7 +320,7 @@ namespace UnoOnline.GameLogic
             if (playerSocket.State == WebSocketState.Open)
             {
                 await playerSocket.SendAsync(
-                    Encoding.UTF8.GetBytes("ChooseColor"), // 📩 Enviar mensaje para elegir color
+                    Encoding.UTF8.GetBytes("ChooseColor"),
                     WebSocketMessageType.Text,
                     true,
                     CancellationToken.None
@@ -362,41 +332,12 @@ namespace UnoOnline.GameLogic
 
         public bool IsValidMove(Card card)
         {
-            // ✅ Si hay un color forzado por un +4, solo se pueden jugar cartas de ese color o un comodín
             if (forcedColor != null)
             {
                 return card.Color == forcedColor || card.Color == "Wild";
             }
-
-            // ✅ Si no hay restricción, se juega normalmente
             return card.Color == currentCard.Color || card.Value == currentCard.Value || card.Color == "Wild";
         }
-
-
-        //private void HandleSpecialCard(Card card)
-        //{
-        //    if (card.Value == "Skip")
-        //    {
-        //        NextTurn();
-        //    }
-        //    else if (card.Value == "Reverse")
-        //    {
-        //        players.Reverse();
-        //        currentPlayerIndex = players.Count - 1 - currentPlayerIndex;
-        //    }
-        //    else if (card.Value == "+2")
-        //    {
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //    }
-        //    else if (card.Value == "+4")
-        //    {
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //        players[(currentPlayerIndex + 1) % players.Count].Hand.Add(deck.Pop());
-        //    }
-        //}
 
         private void HandleSpecialCard(Card card)
         {
@@ -411,13 +352,10 @@ namespace UnoOnline.GameLogic
             }
             else if (card.Value == "+2")
             {
-                // 🔹 Se maneja en HandlePlayerAction con drawStack
             }
             else if (card.Value == "+4")
             {
-                // 🔹 Se maneja en HandlePlayerAction con drawStack
 
-                // ✅ El jugador elige un nuevo color
                 var currentPlayerSocket = players[currentPlayerIndex].Socket;
                 if (currentPlayerSocket.State == WebSocketState.Open)
                 {
@@ -434,22 +372,20 @@ namespace UnoOnline.GameLogic
 
         private async Task EndGame(string roomId, int winnerId)
         {
-            // 1. Elimina la sala de matchmaking
             bool roomDeleted = await _gameRoomRepository.DeleteRoomAsync(roomId);
-            Console.WriteLine(roomDeleted ? $"✅ Sala {roomId} eliminada." : $"⚠️ No se encontró la sala {roomId}.");
+            Console.WriteLine(roomDeleted ? $"Sala {roomId} eliminada." : $"No se encontró la sala {roomId}.");
 
-            // 2. Suma una victoria al jugador ganador (si hay un ganador)
             if (winnerId != 0)
             {
                 bool victoryAdded = await _userRepository.AddVictoryAsync(winnerId);
-                Console.WriteLine(victoryAdded ? $"🏆 Victoria sumada al jugador {winnerId}." : $"⚠️ No se encontró al jugador {winnerId}.");
+                Console.WriteLine(victoryAdded ? $"Victoria sumada al jugador {winnerId}." : $"⚠No se encontró al jugador {winnerId}.");
             }
         }
 
         public void SetForcedColor(string color)
         {
             forcedColor = color;
-            Console.WriteLine($"🎨 Color forzado actualizado a {forcedColor}");
+            Console.WriteLine($"Color forzado actualizado a {forcedColor}");
         }
 
 

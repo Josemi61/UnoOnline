@@ -13,27 +13,6 @@ namespace UnoOnline.Data
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<GameRoom> GameRooms { get; set; }
 
-        //public DataBaseContext(DbContextOptions<DataBaseContext> options) : base(options) { }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder options)
-        //{
-        //    if (!options.IsConfigured)
-        //    {
-        //        options.UseSqlite($"Data Source={DATABASE_PATH}");
-        //    }
-        //}
-
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    base.OnModelCreating(modelBuilder);
-
-        //    modelBuilder.Entity<User>()
-        //        .HasIndex(u => u.Email)
-        //        .IsUnique();
-
-        //}
-
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             string baseDir = AppDomain.CurrentDomain.BaseDirectory;
@@ -48,7 +27,6 @@ namespace UnoOnline.Data
                 .HasIndex(u => u.Email)
                 .IsUnique();
 
-            // Configurar relaciones en FriendRequest
             modelBuilder.Entity<FriendRequest>()
                 .HasOne(fr => fr.Sender)
                 .WithMany()
