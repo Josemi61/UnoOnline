@@ -12,14 +12,25 @@ export default function Header() {
   return (
     <header className="fixed bottom-4 right-4">
       <div className="relative">
-        <button 
-          onClick={() => setShowOptions(!showOptions)}
-          className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white hover:bg-blue-600 transition-colors"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-          </svg>
-        </button>
+      <button 
+  onClick={() => setShowOptions(!showOptions)}
+  className="w-[4.5rem] h-[4.5rem] rounded-full bg-blue-500 flex items-center justify-center text-white hover:bg-blue-600 transition-colors"
+>
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    className="w-[2.25rem] h-[2.25rem]" 
+    viewBox="0 0 20 20" 
+    fill="currentColor"
+  >
+    <path
+      fillRule="evenodd"
+      d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+      clipRule="evenodd"
+    />
+  </svg>
+</button>
+
+
         
         {showOptions && (
           <div className="absolute bottom-full right-0 mb-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden">

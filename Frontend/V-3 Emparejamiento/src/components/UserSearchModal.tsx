@@ -210,13 +210,12 @@ export default function UserSearchModal({ onClose }: { onClose: () => void }) {
   alt={selectedUser.apodo || "Avatar del usuario"}
   width={128}
   height={128}
-  unoptimized={!!selectedUser.avatarUrl && selectedUser.avatarUrl.startsWith("http")} // Asegura que unoptimized sea true solo si es una URL externa
+  unoptimized={!!selectedUser.avatarUrl && selectedUser.avatarUrl.startsWith("http")}
 />
         <h2 className="text-4xl font-bold mt-4">{selectedUser.apodo}</h2>
         <p className="text-lg mt-2">{selectedUser.email}</p>
       </div>
 
-      {/* Botón de Solicitud de Amistad o Eliminar Amigo */}
       <div className="mt-6 w-full flex justify-center">
         {!selectedUser.isFriend ? (
           <button
