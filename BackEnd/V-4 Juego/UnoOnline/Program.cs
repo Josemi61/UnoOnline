@@ -1,3 +1,4 @@
+//using Examples.WebApi.Services;
 using Memory.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 using System.Text;
 using UnoOnline.Data;
 using UnoOnline.DataMappers;
+using UnoOnline.GameLogic;
 using UnoOnline.Interfaces;
 using UnoOnline.Middleware;
 using UnoOnline.Models;
@@ -20,6 +22,7 @@ namespace UnoOnline
     {
         public static void Main(string[] args)
         {
+
             var builder = WebApplication.CreateBuilder(args);
 
             // Agregar CORS
@@ -29,26 +32,24 @@ namespace UnoOnline
                 {
                     builder.AllowAnyOrigin()    // Permite cualquier origen (incluyendo todos los puertos de localhost)
                            .AllowAnyHeader()    // Permite cualquier encabezado
-                           .AllowAnyMethod();   // Permite cualquier método (GET, POST, etc.)
+                           .AllowAnyMethod();   // Permite cualquier m�todo (GET, POST, etc.)
                 });
             });
 
             // Add services to the container.
             builder.Services.AddControllers();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<UserRepository>();
             builder.Services.AddScoped<UserMapper>();
             builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
-            builder.Services.AddScoped<FriendshipRepository>();
             builder.Services.AddScoped<FriendshipService>();
             builder.Services.AddScoped<IGameRoomRepository, GameRoomRepository>();
             builder.Services.AddScoped<GameRoomRepository>();
             builder.Services.AddTransient<IPasswordHasher, PasswordHasher>();
-            builder.Services.AddSingleton<WebSocketHandler>();
+            builder.Services.AddScoped<UnoGame>();
+            builder.Services.AddScoped<WebSocketHandler>();
             builder.Services.AddScoped<DataBaseContext>();
             builder.Services.AddScoped<middleware>();
-
-            // Añadir el servicio de SignalR
-            builder.Services.AddSignalR();
 
             // Swagger configuration
             builder.Services.AddEndpointsApiExplorer();
@@ -76,7 +77,7 @@ namespace UnoOnline
                 string key = Environment.GetEnvironmentVariable("JWT_KEY");
                 if (string.IsNullOrEmpty(key))
                 {
-                    throw new Exception("JWT_KEY variable de entorno no está configurada.");
+                    throw new Exception("JWT_KEY variable de entorno no est� configurada.");
                 }
 
                 options.TokenValidationParameters = new TokenValidationParameters
@@ -97,7 +98,7 @@ namespace UnoOnline
                 dbcontext.Database.EnsureCreated();
             }
 
-            // Habilitar Swagger y CORS para desarrollo o producción
+            // Habilitar Swagger y CORS para desarrollo o producci�n
             if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
             {
                 app.UseSwagger();
@@ -105,18 +106,15 @@ namespace UnoOnline
             }
 
             app.UseWebSockets();
-            app.UseMiddleware<middleware>();
+            app.UseMiddleware<middleware>();         
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseStaticFiles();
-            app.UseCors("AllowAllOrigins"); // Aplica la política de CORS
+
+            app.UseCors("AllowAllOrigins");
             app.MapControllers();
-
-            // Mapear el hub de SignalR
-            app.MapHub<GameHub>("/gameHub");
-
             app.Run();
         }
     }

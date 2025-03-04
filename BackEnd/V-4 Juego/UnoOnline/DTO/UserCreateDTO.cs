@@ -7,7 +7,7 @@
         public string? Apodo { get; set; }
         public string? Email { get; set; }
         public string? Status { get; set; }
-
+        public string? Role { get; internal set; }
     }
 
     public class UserCreateDTO
@@ -17,7 +17,10 @@
         public string? Apodo { get; set; }
         public string? Email { get; set; }
         public string? Password { get; set; }
+        public string Role { get; set; }
     }
-
-
+    public class UserRoleDTO
+    {
+        public string Role { get; set; }
+    }
 }

@@ -13,6 +13,7 @@ namespace UnoOnline.DataMappers
                 Avatar = user.Avatar,
                 Apodo = user.Apodo,
                 Email = user.Email,
+                Role = user.Role,
                 Status = user.Status.ToString()
             };
         }

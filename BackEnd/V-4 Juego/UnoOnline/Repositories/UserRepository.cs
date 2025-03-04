@@ -73,6 +73,17 @@ namespace UnoOnline.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task<bool> AddVictoryAsync(int playerId)
+        {
+            var player = await _context.Users.FirstOrDefaultAsync(p => p.Id == playerId);
+            if (player != null)
+            {
+                player.victoriasUno++;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
 
     }
 }

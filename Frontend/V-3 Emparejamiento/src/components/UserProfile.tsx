@@ -11,18 +11,16 @@ export interface UserProfileProps {
     apodo: string;
     email: string;
     id: string;
+    role?: "admin" | "user"; // Añadimos role como opcional para compatibilidad
   };
   onLogout: () => void;
 }
 
-
 export default function UserProfile({ onLogout }: { onLogout: () => void }) {
   const [user, setUser] = useState<UserProfileProps["user"] | null>(null);
-  const [showEditForm, setShowEditForm] = useState(false); // Estado para controlar el modal
+  const [showEditForm, setShowEditForm] = useState(false);
   const router = useRouter();
-  const {messages} = useWebSocket();
-
-  // Estado para manejar el WebSocket
+  const { messages } = useWebSocket();
   const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
@@ -36,53 +34,27 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
           apodo: parsedUser.apodo,
           email: parsedUser.email,
           id: parsedUser.id,
+          role: parsedUser.role || "user", // Añadimos el rol, por defecto "user" si no existe
         });
       } catch (error) {
         console.error("Error al analizar el usuario del localStorage:", error);
       }
     }
   }, []);
-
-  // useEffect(() =>{
-  //   console.log("mensaje recibido", messages);
-  //  }, [messages])
-  
-  useEffect(() => {
-    // Recuperar datos del usuario desde localStorage
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser({
-          avatar: `https://localhost:7201/images/${parsedUser.avatar}`,
-          apodo: parsedUser.apodo,
-          email: parsedUser.email,
-          id: parsedUser.id,
-        });
-      } catch (error) {
-        console.error("Error al analizar el usuario del localStorage:", error);
-      }
-    }
-  }, []);
-  
-  
 
   const handleLogout = () => {
-    // Borrar el localStorage
     localStorage.clear();
-
-    // Redirigir a la página de inicio
     router.push("/");
-
-    // Llamar a la función onLogout proporcionada, si es necesario
     if (onLogout) {
       onLogout();
     }
-
-    // Cerrar el WebSocket si está abierto
     if (socket) {
       socket.close();
     }
+  };
+
+  const handleAdminRedirect = () => {
+    router.push("../admin"); // Redirige a la página de administración
   };
 
   const closeEditForm = () => {
@@ -114,11 +86,20 @@ export default function UserProfile({ onLogout }: { onLogout: () => void }) {
           <p className="text-sm text-gray-300">{user.email}</p>
         </div>
       </div>
-      <div>
+      <div className="flex items-center space-x-4">
+        {/* Botón Admin (solo visible si el usuario es admin) */}
+        {user.role === "admin" && (
+          <button
+            onClick={handleAdminRedirect}
+            className="text-blue-300 hover:text-blue-100"
+          >
+            Admin
+          </button>
+        )}
         {/* Botón para abrir el formulario de edición */}
         <button
           onClick={() => setShowEditForm(true)}
-          className="text-blue-300 hover:text-blue-100 mr-4"
+          className="text-blue-300 hover:text-blue-100"
         >
           Editar Perfil
         </button>

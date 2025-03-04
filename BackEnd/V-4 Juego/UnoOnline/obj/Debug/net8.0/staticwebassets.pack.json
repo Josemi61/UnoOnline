@@ -1,24 +1,20 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "Id": "C:\\Users\\Juanjo\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default1.png",
       "PackagePath": "staticwebassets\\images\\Default1.png"
     },
     {
-      "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "Id": "C:\\Users\\Juanjo\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default2.png",
       "PackagePath": "staticwebassets\\images\\Default2.png"
     },
     {
-      "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "Id": "C:\\Users\\Juanjo\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default3.png",
       "PackagePath": "staticwebassets\\images\\Default3.png"
     },
     {
-      "Id": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-3 Emparejamiento\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "Id": "C:\\Users\\Juanjo\\Desktop\\UnoOnline\\BackEnd\\V-4 Juego\\UnoOnline\\wwwroot\\images\\Default4.png",
       "PackagePath": "staticwebassets\\images\\Default4.png"
-    },
-    {
-      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.UnoOnline.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
-      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.UnoOnline.Microsoft.AspNetCore.StaticWebAssets.props",

@@ -9,10 +9,11 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
   const [nickname, setNickname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth(); // Uso del contexto para gestionar login
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -27,26 +28,20 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
       return;
     }
 
-    // if (!validatePassword(password)) {
-    //   setError(
-    //     "La contraseña debe tener al menos 8 caracteres, incluyendo mayúsculas, minúsculas, números y caracteres especiales."
-    //   );
-    //   setIsLoading(false);
-    //   return;
-    // }
-
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
       setIsLoading(false);
       return;
     }
 
+    const role = "user"; // Definimos el role como "user" automáticamente
     try {
       const formData = new FormData();
       formData.append("Id", "0"); // ID predeterminado en 0 como muestra Swagger
       formData.append("Apodo", nickname);
       formData.append("Email", email);
       formData.append("Password", password);
+      formData.append("Role", role); // Añadimos el role como "user" automáticamente
       if (avatar) {
         formData.append("Avatar", avatar);
       }
@@ -66,13 +61,14 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
       // Simulación de un token desde el backend
       const token = data.token || "dummyToken";
 
-      // Guardar el usuario en el contexto
+      // Guardar el usuario en el contexto, incluyendo el role
       login(
         {
           id: data.id || 0,
           apodo: data.apodo,
           email: data.email,
           avatar: avatar as File,
+          role: "user", // Añadimos el role al objeto del usuario
         },
         token
       );
@@ -80,7 +76,7 @@ export default function RegisterForm({ onClose }: { onClose: () => void }) {
       console.log("Usuario registrado:", data);
       alert("Registro exitoso");
       onClose(); // Cerrar el formulario
-//    router.push(""); // Redirigir al menú
+      // router.push(""); // Redirigir al menú
     } catch (err: unknown) {
       console.error("Error detallado:", err);
       if (err instanceof Error) {

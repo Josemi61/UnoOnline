@@ -12,6 +12,7 @@ namespace UnoOnline.Interfaces
         Task AddUserAsync(User user);
         Task<string> StoreImageAsync(IFormFile file, string avatarName);
         Task UpdateUserAsync(User user);
+        Task<bool> AddVictoryAsync(int playerId);
 
     }
 }

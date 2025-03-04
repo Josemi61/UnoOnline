@@ -12,8 +12,8 @@ interface Friend {
 }
 
 interface FriendsListProps {
-  onSelectFriend: (friend: Friend) => void; // ✅ Añadimos la prop
-  onClose: () => void; // ✅ Añadimos la prop
+  onSelectFriend: (friend: Friend) => void;
+  onClose: () => void;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://localhost:7201";
@@ -55,8 +55,9 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
           headers: {
             "Content-Type": "application/json",
             Accept: "*/*",
+            Authorization: `Bearer ${localStorage.getItem("authToken") || ""}`, // Añadimos el token JWT
           },
-          body: JSON.stringify({ apodo: searchTerm.trim() || "" }),
+          body: JSON.stringify({ apodo: searchTerm.trim() || "" }), // Filtramos por apodo si hay búsqueda
         });
 
         if (!response.ok) {
@@ -66,19 +67,34 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
         const data: Friend[] = await response.json();
         setFriends(data);
       } catch (error) {
-        setError("No se pudo obtener la lista de amigos.");
+        setError("No se pudo obtener la lista de amigos: " + (error instanceof Error ? error.message : "Desconocido"));
       }
     };
 
     fetchFriends();
-  }, [userId]);
+  }, [userId, searchTerm]); // Añadimos searchTerm como dependencia para filtrar dinámicamente
 
   const handleRemoveFriend = async (friendId: string) => {
     if (confirm("¿Estás seguro de que quieres eliminar a este amigo?")) {
       try {
+        // Aquí deberías hacer una solicitud al backend para eliminar la amistad
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(`${API_URL}/api/Friendships/Remove/${userId}/${friendId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Error al eliminar al amigo");
+        }
+
         setFriends((prev) => prev.filter((friend) => friend.id !== friendId));
+        alert("Amigo eliminado correctamente");
       } catch (error) {
-        console.error("Error al eliminar amigo:", error);
+        setError("Error al eliminar al amigo: " + (error instanceof Error ? error.message : "Desconocido"));
       }
     }
   };
@@ -137,11 +153,10 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
                 <Link href={`/profile/${friend.id}`} className="text-blue-300 hover:text-blue-100 mr-4">
                   Ver Perfil
                 </Link>
-                <button onClick={() => handleRemoveFriend(friend.id)} className="text-red-400 hover:text-red-200">
+                <button onClick={() => handleRemoveFriend(friend.id)} className="text-red-400 hover:text-red-200 mr-4">
                   Eliminar Amigo
                 </button>
-                {/* Botón para seleccionar un amigo */}
-                <button onClick={() => onSelectFriend(friend)} className="ml-4 bg-blue-500 text-white px-2 py-1 rounded">
+                <button onClick={() => onSelectFriend(friend)} className="bg-blue-500 text-white px-2 py-1 rounded">
                   Invitar
                 </button>
               </div>
@@ -150,7 +165,6 @@ export default function FriendsList({ onSelectFriend, onClose }: FriendsListProp
         </ul>
       )}
 
-      {/* Botón para cerrar la lista */}
       <div className="text-center mt-4">
         <button onClick={onClose} className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
           Cerrar

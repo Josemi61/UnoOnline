@@ -3,6 +3,10 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useWebSocket } from "../context/WebSocketContext";
+import { useAuth } from "../context/Authprovider";
+import { useRouter } from "next/navigation";
+
+
 
 interface UserProfileData {
   id: string;
@@ -26,8 +30,10 @@ export default function UserProfileModal({ userId, onClose }: UserProfileModalPr
   const [error, setError] = useState<string | null>(null);
 
   const { socket } = useWebSocket();
+  const { user } = useAuth();
+  const router = useRouter();
 
-  const currentUserId = JSON.parse(localStorage.getItem("user") || "{}").id;
+  const currentUserId = user?.id;
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -78,48 +84,56 @@ export default function UserProfileModal({ userId, onClose }: UserProfileModalPr
 
   if (error || !profile) {
     return <div className="text-center p-8 text-red-500">{error || "Error al cargar el perfil"}</div>;
-    }
-    return (
-        <>
-          <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 overflow-y-auto z-50">
-            <div className="bg-gray-800 text-white rounded-xl p-6 w-full max-w-md shadow-xl relative">
-              <button onClick={onClose} className="absolute top-3 right-3 text-gray-400 hover:text-gray-200">
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
+  }
+  return (
+    <>
+      <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center p-4 overflow-y-auto z-50">
+        <div className="bg-gray-800 text-white rounded-xl p-6 w-full max-w-md shadow-xl relative">
+          <button onClick={onClose} className="absolute top-3 right-3 text-gray-400 hover:text-gray-200">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <div className="flex flex-col items-center text-center">
+            <Image
+              src={profile.avatar}
+              alt={`Avatar de ${profile.apodo}`}
+              width={80}
+              height={80}
+              className="rounded-full"
+              unoptimized
+            />
+            <h3 className="text-2xl font-semibold mt-3">{profile.apodo}</h3>
+            <p className="text-gray-400">{profile.email}</p>
+
+            {profile.id !== currentUserId && (
+              <button
+                onClick={handleFriendAction}
+                className={`w-full font-bold py-2 px-4 rounded-lg transition-colors mt-4 ${
+                  profile.isFriend
+                    ? "bg-red-500 hover:bg-red-600"
+                    : profile.hasPendingRequest
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-blue-500 hover:bg-blue-600"
+                }`}
+                disabled={profile.hasPendingRequest}
+              >
+                {profile.isFriend ? "Dejar de ser amigos" : profile.hasPendingRequest ? "Solicitud enviada" : "Enviar solicitud de amistad"}
               </button>
-      
-              <div className="flex flex-col items-center text-center">
-                <Image
-                  src={profile.avatar}
-                  alt={`Avatar de ${profile.apodo}`}
-                  width={80}
-                  height={80}
-                  className="rounded-full"
-                  unoptimized
-                />
-                <h3 className="text-2xl font-semibold mt-3">{profile.apodo}</h3>
-                <p className="text-gray-400">{profile.email}</p>
-      
-                {profile.id !== currentUserId && (
-                  <button
-                    onClick={handleFriendAction}
-                    className={`w-full font-bold py-2 px-4 rounded-lg transition-colors mt-4 ${
-                      profile.isFriend
-                        ? "bg-red-500 hover:bg-red-600"
-                        : profile.hasPendingRequest
-                        ? "bg-gray-500 cursor-not-allowed"
-                        : "bg-blue-500 hover:bg-blue-600"
-                    }`}
-                    disabled={profile.hasPendingRequest}
-                  >
-                    {profile.isFriend ? "Dejar de ser amigos" : profile.hasPendingRequest ? "Solicitud enviada" : "Enviar solicitud de amistad"}
-                  </button>
-                )}
-              </div>
-            </div>
+            )}
+
+            {user?.role === "admin" && (
+              <button
+                onClick={() => router.push("/admin")}
+                className="mt-4 w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg"
+              >
+                Admin
+              </button>
+            )}
           </div>
-        </>
-      );
-      
+        </div>
+      </div>
+    </>
+  );
 }

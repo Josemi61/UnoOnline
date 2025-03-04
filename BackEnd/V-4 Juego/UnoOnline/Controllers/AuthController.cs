@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -10,6 +9,7 @@ using UnoOnline.Interfaces;
 using UnoOnline.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+
 namespace UnoOnline.Controllers
 {
     [Route("api/[controller]")]
@@ -34,7 +34,8 @@ namespace UnoOnline.Controllers
             string hashedPassword = _passwordHash.Hash(model.Password);
 
             var user = await _context.Users
-                .FirstOrDefaultAsync(u =>(u.Email == model.Identificador && u.Password == hashedPassword) || (u.Apodo == model.Identificador && u.Password == hashedPassword));
+                .FirstOrDefaultAsync(u => (u.Email == model.Identificador && u.Password == hashedPassword) ||
+                                         (u.Apodo == model.Identificador && u.Password == hashedPassword));
 
             if (user != null)
             {
@@ -45,8 +46,8 @@ namespace UnoOnline.Controllers
                         { "Id", user.Id },
                         { "Apodo", user.Apodo },
                         { "Email", user.Email },
-                        { "Avatar", user.Avatar }
-                        
+                        { "Avatar", user.Avatar },
+                        { ClaimTypes.Role, user.Role } // Añadimos el rol como claim estándar
                     },
                     Expires = DateTime.UtcNow.AddHours(2),
                     SigningCredentials = new SigningCredentials(
@@ -66,11 +67,5 @@ namespace UnoOnline.Controllers
             }
         }
 
-        //[HttpGet("secret")]
-        //public ActionResult GetSecret()
-        //{
-        //    // Si el usuario es admin, devuelve el secreto
-        //    return Ok("Esto es un secreto que no todo el mundo debería leer");
-        //}
     }
 }

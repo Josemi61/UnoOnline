@@ -18,11 +18,8 @@ export default function MatchmakingView() {
   const [isHost, setIsHost] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState<Player | null>(null);
   const [showFriendsList, setShowFriendsList] = useState(false);
-  const socketRef = useRef<WebSocket | null>(null);
   const router = useRouter();
-  const {roomId, setRoomId, socket, opponent, isSearching, invitation, setOpponent, setIsSearching, setInvitation} = useWebSocket();
-
-  
+  const { roomId, setRoomId, socket, opponent, isSearching, invitation, setOpponent, setIsSearching, setInvitation } = useWebSocket();
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -35,8 +32,6 @@ export default function MatchmakingView() {
       });
     }
   }, []);
-
-
 
   const handleCreateRoom = () => {
     if (!currentPlayer) return;
@@ -57,7 +52,6 @@ export default function MatchmakingView() {
     setOpponent({ id: "bot", apodo: "Bot UNO", avatar: "/images/bot-avatar.png" });
   };
 
-
   const handleInviteFriend = () => {
     setShowFriendsList(true);
   };
@@ -74,6 +68,7 @@ export default function MatchmakingView() {
     if (!invitation || !currentPlayer) return;
     sendMessage(`JoinGame|${currentPlayer.id},${invitation.roomId}`);
     setRoomId(invitation.roomId);
+    setOpponent({ id: invitation.senderId, apodo: "Unknown", avatar: "/images/default-avatar.png" });
     setInvitation(null);
   };
 
@@ -82,18 +77,18 @@ export default function MatchmakingView() {
   };
 
   const handleLeave = () => {
-    socketRef.current?.close();
+    socket?.close();
     router.push("/menu");
   };
 
   const sendMessage = (message: string) => {
-   
     if (socket) {
       socket.send(message);
     }
   };
 
-  console.log(roomId);
+  // ** Mostrar el botón "Jugar" si hay un oponente definido **
+  const canPlay = !!opponent;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-blue-800 p-8">
@@ -155,6 +150,16 @@ export default function MatchmakingView() {
           <p className="text-white">Te han invitado a una sala</p>
           <button onClick={handleAcceptInvitation} className="bg-green-500 px-4 py-2 m-2 rounded">Aceptar</button>
           <button onClick={handleRejectInvitation} className="bg-red-500 px-4 py-2 m-2 rounded">Rechazar</button>
+        </div>
+      )}
+
+      {canPlay && (
+        <div className="text-center mt-8">
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-6 rounded-lg text-lg"
+          >
+            JUGAR
+          </button>
         </div>
       )}
 
