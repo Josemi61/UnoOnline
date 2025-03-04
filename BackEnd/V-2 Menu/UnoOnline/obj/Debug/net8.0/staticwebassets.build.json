@@ -1,0 +1,537 @@
+{
+  "Version": 1,
+  "Hash": "XHqkuqM5JsOoHvw8++epRQNqqMBzFWTbeCYEWaoDFaA=",
+  "Source": "UnoOnline",
+  "BasePath": "_content/UnoOnline",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "UnoOnline\\wwwroot",
+      "Source": "UnoOnline",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Adri#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "rt5ga5mdub",
+      "Integrity": "gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Adri.png"
+    },
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Default1#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "5cuhas3ev8",
+      "Integrity": "1Z1a7FjB/3xr2tEOa2IdCu98Xv+If0/dBdRwrF41qbg=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Default1.png"
+    },
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Default2#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "c0mlfk6kr1",
+      "Integrity": "rAEbjJNMO+cmOMT+O6J6DsdgofiEJed0FF3dVRRogE8=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Default2.png"
+    },
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Default3#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "9itqiry30x",
+      "Integrity": "H2qBjcaBsO3JaKdsUKcamHIVau68MRz2NJBASMS7B7o=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Default3.png"
+    },
+    {
+      "Identity": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "SourceId": "UnoOnline",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\",
+      "BasePath": "_content/UnoOnline",
+      "RelativePath": "images/Default4#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "09axiw5v2m",
+      "Integrity": "3GvnyFMKQ32tclzaCfwKaAyPCRwBUlrnM3lqDqfGYIE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\Default4.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "images/Adri.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "86970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 14:40:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo="
+        }
+      ]
+    },
+    {
+      "Route": "images/Adri.rt5ga5mdub.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Adri.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "86970"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Thu, 06 Feb 2025 14:40:58 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "rt5ga5mdub"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Adri.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-gWCwc66ixieRppFAqQ201qL5fpGnnE9KIVvOkQ1Dqwo="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default1.5cuhas3ev8.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "255060"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1Z1a7FjB/3xr2tEOa2IdCu98Xv+If0/dBdRwrF41qbg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "5cuhas3ev8"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Default1.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-1Z1a7FjB/3xr2tEOa2IdCu98Xv+If0/dBdRwrF41qbg="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default1.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default1.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "255060"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"1Z1a7FjB/3xr2tEOa2IdCu98Xv+If0/dBdRwrF41qbg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-1Z1a7FjB/3xr2tEOa2IdCu98Xv+If0/dBdRwrF41qbg="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default2.c0mlfk6kr1.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "256353"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rAEbjJNMO+cmOMT+O6J6DsdgofiEJed0FF3dVRRogE8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "c0mlfk6kr1"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Default2.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-rAEbjJNMO+cmOMT+O6J6DsdgofiEJed0FF3dVRRogE8="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default2.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default2.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "256353"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"rAEbjJNMO+cmOMT+O6J6DsdgofiEJed0FF3dVRRogE8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-rAEbjJNMO+cmOMT+O6J6DsdgofiEJed0FF3dVRRogE8="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default3.9itqiry30x.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "237363"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H2qBjcaBsO3JaKdsUKcamHIVau68MRz2NJBASMS7B7o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "9itqiry30x"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Default3.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-H2qBjcaBsO3JaKdsUKcamHIVau68MRz2NJBASMS7B7o="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default3.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default3.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "237363"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"H2qBjcaBsO3JaKdsUKcamHIVau68MRz2NJBASMS7B7o=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-H2qBjcaBsO3JaKdsUKcamHIVau68MRz2NJBASMS7B7o="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default4.09axiw5v2m.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "252800"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3GvnyFMKQ32tclzaCfwKaAyPCRwBUlrnM3lqDqfGYIE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "09axiw5v2m"
+        },
+        {
+          "Name": "label",
+          "Value": "images/Default4.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-3GvnyFMKQ32tclzaCfwKaAyPCRwBUlrnM3lqDqfGYIE="
+        }
+      ]
+    },
+    {
+      "Route": "images/Default4.png",
+      "AssetFile": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\wwwroot\\images\\Default4.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "252800"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"3GvnyFMKQ32tclzaCfwKaAyPCRwBUlrnM3lqDqfGYIE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 04 Feb 2025 14:39:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-3GvnyFMKQ32tclzaCfwKaAyPCRwBUlrnM3lqDqfGYIE="
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\websockets\\websockethandler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\repositories\\friendshiprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\repositories\\friendshiprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\data\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\data\\databasecontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\controllers\\websocketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\controllers\\friendshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\controllers\\friendshipcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\repositories\\gameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\repositories\\gameroomrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|c:\\users\\abust\\desktop\\unoonline\\backend\\v-2 menu\\unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03D2C28E-363A-4965-A07B-A6CDD2867A9A}|UnoOnline\\UnoOnline.csproj|solutionrelative:unoonline\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 822,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DataBaseContext.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Data\\DataBaseContext.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Data\\DataBaseContext.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Data\\DataBaseContext.cs",
+              "RelativeToolTip": "UnoOnline\\Data\\DataBaseContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T15:35:49.24Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "GameRoomRepository.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Repositories\\GameRoomRepository.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Repositories\\GameRoomRepository.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Repositories\\GameRoomRepository.cs",
+              "RelativeToolTip": "UnoOnline\\Repositories\\GameRoomRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADsAAABtAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-06T15:07:36.501Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "FriendShipController.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Controllers\\FriendShipController.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Controllers\\FriendShipController.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Controllers\\FriendShipController.cs",
+              "RelativeToolTip": "UnoOnline\\Controllers\\FriendShipController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-05T14:28:31.826Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FriendShipRepository.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Repositories\\FriendShipRepository.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Repositories\\FriendShipRepository.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Repositories\\FriendShipRepository.cs",
+              "RelativeToolTip": "UnoOnline\\Repositories\\FriendShipRepository.cs",
+              "ViewState": "AgIAACoAAAAAAAAAAAAIwBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-04T19:10:26.081Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WebSocketHandler.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "RelativeToolTip": "UnoOnline\\WebSockets\\WebSocketHandler.cs",
+              "ViewState": "AgIAAD8AAAAAAAAAAAAYwO4AAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-31T16:27:50.281Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Program.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Program.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Program.cs",
+              "RelativeToolTip": "UnoOnline\\Program.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAowB8AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-04T15:36:07.391Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "WebSocketController.cs",
+              "DocumentMoniker": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Controllers\\WebSocketController.cs",
+              "RelativeDocumentMoniker": "UnoOnline\\Controllers\\WebSocketController.cs",
+              "ToolTip": "C:\\Users\\abust\\Desktop\\UnoOnline\\BackEnd\\V-2 Menu\\UnoOnline\\Controllers\\WebSocketController.cs",
+              "RelativeToolTip": "UnoOnline\\Controllers\\WebSocketController.cs",
+              "ViewState": "AgIAABAAAAAAAAAAAAAQwCIAAABQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-04T15:16:42.733Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
